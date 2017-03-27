@@ -17,9 +17,8 @@ public class Process {
     int processNumber; //unique identifier for each process
     int programCounter; //represents next memory location
     //**********************************************************
-
-    //Display - this information needs to be displayed for each process
-    int TIME_NEEDED; //amount of time this process needs
+    //Display -- this information needs to be displayed for each process
+    int TIME_NEEDED; //total amount of time this process needs
     int timeUsed; //amount of time this process has already used
     int timeLeft; //amount of time this process has left
                 //timeLeft = TIME_NEEDED - timeUsed
@@ -27,5 +26,10 @@ public class Process {
     int IO_REQUESTS; //number of I/O requests this process will execute (can be 0-5)
     int satisfiedIORequests; //number of satisfied I/O requests
     int outstandingIORequests; //number of I/O requests left
+
+    int priority; //queue position
+    //*************************************
+
+
 
 }
