@@ -1,0 +1,20 @@
+Brainstorm for setting up project\
+
+5-STATE MODEL \
+-states represented by numbers
+1 = new
+2 = ready
+3 = running
+4 = blocked
+5 = exit
+
+
+PROCESS
+* Requirements for PCB:
+ *  -Pointer (location in memeory)
+ *  -process state
+ *  -process number
+ *  -program counter
+ *  -registries
+ *  -memory limits
+
