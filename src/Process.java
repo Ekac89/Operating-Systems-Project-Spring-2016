@@ -7,6 +7,7 @@ public class Process {
     int PROCESS_SIZE; //memory size of process (can be 1-8MB in size)
 
     //Process Control Block (PCB) *****************************
+    int processNumber; //unique identifier for each process
     int pointerIndex; //array index that represents location in memory
     int state; //number represents process' current state:
                     //1 = new
@@ -14,7 +15,6 @@ public class Process {
                     //3 = running
                     //4 = blocked
                     //5 = exit
-    int processNumber; //unique identifier for each process
     int programCounter; //represents next memory location
     //**********************************************************
     //Display -- this information needs to be displayed for each process
