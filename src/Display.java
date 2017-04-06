@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by Marjorie on 3/27/2017.
  *GUI for our OS simulator
  *
  * For each active process the following information displayed:
