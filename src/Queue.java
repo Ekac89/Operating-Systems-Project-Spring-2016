@@ -1,6 +1,11 @@
+import java.util.LinkedList;
+
 /**
  *
  *
  */
-public class Queue {
+public class Queue extends Process{
+
+    LinkedList<Process> = new LinkedList<>();
+
 }
