@@ -9,7 +9,7 @@ public class OSProcess{
     int PROCESS_SIZE; //memory size of process (can be 1-8MB in size)
 
     //OSProcess Control Block (PCB) *****************************
-    int processNumber; //unique identifier for each process
+    int processNumber; //unique identifier for each process (at most 60 processes)
     int pointerIndex; //array index that represents location in memory
     int state; //number represents process' current state:
                     //1 = new
@@ -47,7 +47,12 @@ public class OSProcess{
     boolean complete;
 
 
-    public OSProcess(int memorySize, int ioRequests, int cycles, int arrivalTime){
+    public OSProcess(int memorySize, int ioRequests, int cycles, int arrivalTime, int processID){
+        this.state = 1; //process starts as 1 = new
+        this.processNumber = processID; //no more than 60, should be incremented by current processes entered
+        //TODO: instantiate pointer index
+        //TODO: instantiate program counter
+
         this.PROCESS_SIZE = memorySize;
         this.IO_REQUESTS = ioRequests;
         this.CYCLES = cycles;

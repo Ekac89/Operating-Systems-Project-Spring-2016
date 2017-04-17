@@ -10,6 +10,9 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class OperatingSystem extends Frame {
 
+    //no more than 60 processes entered in 5-state model
+    int processesEntered = 0; //counts incoming processes, should increment for each new process entered in system
+
     int currentProcessNumber; //processNumber for current process
     OSProcess currentProcess;
 
@@ -32,7 +35,7 @@ public class OperatingSystem extends Frame {
     }
 
     //creating Random OSProcess, pass in current clock time
-    public OSProcess createRandomProcess(int currentTime){
+    public OSProcess createRandomProcess(int currentTime, int currentProcessCount){
         //process size can be 1-8
         int memorySize = ThreadLocalRandom.current().nextInt(1, 8);
         //process can have 0 to 5 I/O requests
@@ -40,7 +43,7 @@ public class OperatingSystem extends Frame {
         //process takes between 10-950 CYCLES to complete
         int cycles = ThreadLocalRandom.current().nextInt(10,950);
         //process' arrival time will be its creation
-        OSProcess randomProcess = new OSProcess(memorySize,ioRequests,cycles,currentTime);
+        OSProcess randomProcess = new OSProcess(memorySize,ioRequests,cycles,currentTime,currentProcessCount);
 
         //making the I/O requests that will interrupt it
         for(int i=0; i<ioRequests; i++){
@@ -51,7 +54,6 @@ public class OperatingSystem extends Frame {
 
             randomProcess.ioRequests[i] = new IORequest(ioCyclesNeeded,ioCycleLaunch);
         }
-
 
         return randomProcess;
     }
