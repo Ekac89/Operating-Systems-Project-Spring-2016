@@ -18,6 +18,13 @@ public class OperatingSystem extends Frame {
 
     List<OSProcess> newProcesses, readyQueue, running, blocked, exited = new ArrayList<OSProcess>();
 
+    //round robin algorithm
+    public void roundRobin(OSProcess enteringProcess){
+        this.readyQueue.add(enteringProcess);
+
+
+
+    }
 
     //sets up OS
     public void startUp(){
@@ -26,13 +33,6 @@ public class OperatingSystem extends Frame {
 
     }
 
-
-    public void roundRobin(OSProcess enteringProcess){
-        this.readyQueue.add(enteringProcess);
-
-
-
-    }
 
     //creating Random OSProcess, pass in current clock time
     public OSProcess createRandomProcess(int currentTime, int currentProcessCount){

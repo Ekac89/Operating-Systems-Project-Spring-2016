@@ -47,7 +47,7 @@ public class OSProcess{
     boolean complete;
 
 
-    public OSProcess(int memorySize, int ioRequests, int cycles, int arrivalTime, int processID){
+    public OSProcess(int processID, int memorySize, int ioRequests, int cycles, int arrivalTime){
         this.state = 1; //process starts as 1 = new
         this.processNumber = processID; //no more than 60, should be incremented by current processes entered
         //TODO: instantiate pointer index
@@ -71,11 +71,15 @@ public class OSProcess{
         //first, checks for I/O interrupt
         for(int i =0; i<IO_REQUESTS; i++){
             if(ioRequests[i].getPRCS_CYCLE_LAUNCH() == this.cyclesUsed){
+                this.state = 4; //process is in block state when interrupted
+
                 ioRequests[i].runIO();
                 ioRequestsUnsatisfied--;
                 ioRequestsSatisfied++;
             }
         }
+
+        this.state = 3; //state set to running
 
         this.cyclesUsed++;
         this.cyclesLeft--;

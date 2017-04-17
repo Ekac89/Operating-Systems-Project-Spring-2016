@@ -3,18 +3,14 @@ import java.util.LinkedList;
 /**
  *
  */
-public class RoundRobin{
+public class RoundRobin extends OperatingSystem{
 
     int TIME_QUANTUM = 1; //1 second for timeslice
 
-
-    LinkedList<OSProcess> requestQueue = new LinkedList<>();
-
+    //adds a new process, arrival time should be current time
     public void addProcess(OSProcess enteringProcess, int arrivalTime){
-        requestQueue.add(enteringProcess);
+        newProcesses.add(enteringProcess);
         enteringProcess.setARRIVAL_TIME(arrivalTime);
-
-
     }
 
 
