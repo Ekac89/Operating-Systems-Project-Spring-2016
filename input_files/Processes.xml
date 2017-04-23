@@ -1,1 +1,19 @@
-<?xml version=""
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+<!-- process template:
+	<item>
+		<memorySize></memorySize>
+		<ioRequests></ioRequests>
+		<cycles></cycles>
+		<arrivalTime></arrivalTime>
+	</item> 
+-->
+	<item>
+		<memorySize></memorySize> <!-- 1-8 -->
+		<ioRequests></ioRequests> <!-- 0-5 -->
+		<cycles></cycles>          <!-- 10-950 -->
+		<arrivalTime></arrivalTime> <!-- clock time -->
+	</item>
+
+
+</config>

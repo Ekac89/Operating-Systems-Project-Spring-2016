@@ -1,4 +1,4 @@
-import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.*;
 
 /**
  *
@@ -9,7 +9,7 @@ public class OSProcess{
     int PROCESS_SIZE; //memory size of process (can be 1-8MB in size)
 
     //OSProcess Control Block (PCB) *****************************
-    int processNumber; //unique identifier for each process (at most 60 processes)
+    int processID; //unique identifier for each process (at most 60 processes)
     int pointerIndex; //array index that represents location in memory
     int state; //number represents process' current state:
                     //1 = new
@@ -28,6 +28,8 @@ public class OSProcess{
     Integer[] startCycleTimeIO; //when, by cycle, each IO will start on
     //**********************************************************
     //Display -- this information needs to be displayed for each process
+    JLabel processDisplay;
+
     double TIME_NEEDED; //total amount of time this process needs in seconds
     double timeUsed; //amount of time this process has already used
     double timeLeft; //amount of time this process has left
@@ -47,9 +49,10 @@ public class OSProcess{
     boolean complete;
 
 
+
     public OSProcess(int processID, int memorySize, int ioRequests, int cycles, int arrivalTime){
         this.state = 1; //process starts as 1 = new
-        this.processNumber = processID; //no more than 60, should be incremented by current processes entered
+        this.processID = processID; //no more than 60, should be incremented by current processes entered
         //TODO: instantiate pointer index
         //TODO: instantiate program counter
 
@@ -64,22 +67,33 @@ public class OSProcess{
 
         this.ioRequestsSatisfied = 0;
         this.ioRequestsUnsatisfied = ioRequests; //all I/O Requests are unsatisfied on process create
+
+        this.processDisplay.setText("<html>" +
+                "Process ID: " + processID
+                + "<br>Total CPU Time Needed: " + TIME_NEEDED
+                + "<br>CPU Time Used: " + timeLeft
+                + "<br>Priority: " + priority
+                + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
+                + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
+                + "</html>");
     }
 
-
+    //can update process display 3 times
     public void runOneCycle(){
         //first, checks for I/O interrupt
         for(int i =0; i<IO_REQUESTS; i++){
             if(ioRequests[i].getPRCS_CYCLE_LAUNCH() == this.cyclesUsed){
-                this.state = 4; //process is in block state when interrupted
+                setState(4); //process is in block state when interrupted, updates display
 
                 ioRequests[i].runIO();
                 ioRequestsUnsatisfied--;
                 ioRequestsSatisfied++;
+
+                updateProcessDisplay(); //updates because process state was changed and I/O request made
             }
         }
 
-        this.state = 3; //state set to running
+        setState(3); //state set to running, also updates process display
 
         this.cyclesUsed++;
         this.cyclesLeft--;
@@ -91,6 +105,41 @@ public class OSProcess{
         if(cyclesLeft == 0){    //TODO: doesn't check if I/O requests done
             complete = true;
         }
+
+        updateProcessDisplay(); //updates display after cycle is done
+    }
+
+    //update display for this particular process
+    public void updateProcessDisplay(){
+        this.processDisplay.setText("<html>" +
+                "Process ID: " + this.processID
+                + "<br>Total CPU time needed: " + this.TIME_NEEDED
+                + "<br>CPU time used: " + this.timeLeft
+                + "<br>Priority: " + this.priority
+                + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
+                + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
+                + "<br>Current state: " + stateToString()
+                + "</html>");
+    }
+
+
+
+    //converts current state to a readable string
+    public String stateToString(){
+        switch(this.state){
+            case 1:
+                return "NEW";
+            case 2:
+                return "READY";
+            case 3:
+                return "RUNNING";
+            case 4:
+                return "BLOCKED";
+            case 5:
+                return "EXITED";
+            default:
+                return "INVALID STATE: " + state;
+        }
     }
 
 
@@ -100,8 +149,8 @@ public class OSProcess{
         this.PROCESS_SIZE = PROCESS_SIZE;
     }
 
-    public void setProcessNumber(int processNumber) {
-        this.processNumber = processNumber;
+    public void setProcessID(int processID) {
+        this.processID = processID;
     }
 
     public void setPointerIndex(int pointerIndex) {
@@ -110,6 +159,7 @@ public class OSProcess{
 
     public void setState(int state) {
         this.state = state;
+        updateProcessDisplay();
     }
 
     public void setProgramCounter(int programCounter) {
@@ -128,9 +178,7 @@ public class OSProcess{
         this.timeLeft = timeLeft;
     }
 
-    public void setIO_REQUESTS(int IO_REQUESTS) {
-        this.IO_REQUESTS = IO_REQUESTS;
-    }
+    public void setIO_REQUESTS(int IO_REQUESTS) {this.IO_REQUESTS = IO_REQUESTS;}
 
     public void setIoRequestsSatisfied(int ioRequestsSatisfied) {
         this.ioRequestsSatisfied = ioRequestsSatisfied;
@@ -150,12 +198,14 @@ public class OSProcess{
 
 
     //Getters
+    public JLabel getProcessDisplay(){return processDisplay;}
+
     public int getPROCESS_SIZE() {
         return PROCESS_SIZE;
     }
 
-    public int getProcessNumber() {
-        return processNumber;
+    public int getProcessID() {
+        return processID;
     }
 
     public int getPointerIndex() {

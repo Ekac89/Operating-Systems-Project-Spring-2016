@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
-/**
+/** Object that holds variables that will be displayed/updated
+ *
+ *
  *GUI for our OS simulator
  *
  * For each active process the following information displayed:
@@ -20,42 +22,47 @@ import java.awt.*;
  *  -memory deallocated
  *  -process exits system
  */
-public class Display extends Frame{
 
-//    public static void displayActiveProcess(OperatingSystem systemCurrent){ //takes in current state of operating system
-//
-//    }
-//
-//
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame("Group 3 Operating System Simulator");
-//
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));  //layout
-//
-//       // JLabel label = new JLabel("label");
-//
-//        JButton button = new JButton();
-//        button.setText("worthless button that will eventually make button");
-//
-//        panel.add(new JLabel("OSProcess Size: "));
-//        panel.add(new JTextField(2));
-//        panel.add(new JLabel("Time needed for process: "));
-//        panel.add(new JTextField(2));
-//        panel.add(new JLabel("I/O Requests Needed: "));
-//        panel.add(new JTextField(2));
-//        panel.add(new JLabel("OSProcess Size: "));
-//        panel.add(new JTextField(2));
-//
-//
-//        panel.add(button);
-//
-//
-//        frame.add(panel);
-//        frame.setSize(400, 500);
-//        frame.setLocationRelativeTo(null);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setVisible(true);
-//
-//    }
+
+public class Display extends OperatingSystem{
+
+    JFrame displayFrame;
+    JPanel displayPanel;
+
+
+    public Display(){
+        displayFrame.setTitle("Group 3 Operating System Simulator");
+        displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
+
+        displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
+        for(OSProcess unenteredProcess : outsideProcesses){
+            displayPanel.add(unenteredProcess.getProcessDisplay());
+        }
+
+        displayPanel.add(new JLabel("**NEW PROCESSES**"));
+        for(OSProcess newProcess : newProcesses){
+            displayPanel.add(newProcess.getProcessDisplay());
+        }
+
+        displayPanel.add(new JLabel("**READY QUEUE**"));
+        for(OSProcess readyProcess : readyQueue){
+            displayPanel.add(readyProcess.getProcessDisplay());
+        }
+
+        displayPanel.add(new JLabel("**BLOCKED PROCESSES**"));
+        for(OSProcess blockedProcess : blocked){
+            displayPanel.add(blockedProcess.getProcessDisplay());
+        }
+
+        displayPanel.add(new JLabel("**RUNNING PROCESS**"));
+        for(OSProcess runningProcess : running){
+            displayPanel.add(runningProcess.getProcessDisplay());
+        }
+
+        displayPanel.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
+        for(OSProcess exitedProcess : exited){
+            displayPanel.add(exitedProcess.getProcessDisplay());
+        }
+    }
+
 }

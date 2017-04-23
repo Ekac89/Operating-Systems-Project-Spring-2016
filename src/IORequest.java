@@ -4,7 +4,7 @@
  * -if it is satisfied or not
  *
  */
-public class IORequest extends OperatingSystem{
+public class IORequest{
     int CYCLES; //number of CYCLES needed to be finished (can be 25-50)
     boolean complete;
 

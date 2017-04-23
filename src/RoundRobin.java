@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 
 /**
- *
+ * MAY DELETE THIS CLASS
  */
 public class RoundRobin extends OperatingSystem{
 
@@ -11,6 +11,12 @@ public class RoundRobin extends OperatingSystem{
     public void addProcess(OSProcess enteringProcess, int arrivalTime){
         newProcesses.add(enteringProcess);
         enteringProcess.setARRIVAL_TIME(arrivalTime);
+        enteringProcess.setState(1); //makes sure process is set to new
+    }
+
+    public void setReady(OSProcess readyProcess){
+        readyQueue.add(readyProcess);
+        readyProcess.setState(2); //sets process to ready
     }
 
 
