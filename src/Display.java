@@ -29,40 +29,45 @@ public class Display extends OperatingSystem{
     JFrame displayFrame;
     JPanel displayPanel;
 
-
     public Display(){
-        displayFrame.setTitle("Group 3 Operating System Simulator");
-        displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
+        this.displayPanel = new JPanel();
+    }
 
-        displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
+    public JPanel getDisplayPanel(){
+//        displayFrame.setTitle("Group 3 Operating System Simulator");
+        this.displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
+
+        this.displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
         for(OSProcess unenteredProcess : outsideProcesses){
-            displayPanel.add(unenteredProcess.getProcessDisplay());
+            this.displayPanel.add(unenteredProcess.getProcessDisplay());
         }
 
-        displayPanel.add(new JLabel("**NEW PROCESSES**"));
+        this.displayPanel.add(new JLabel("**NEW PROCESSES**"));
         for(OSProcess newProcess : newProcesses){
-            displayPanel.add(newProcess.getProcessDisplay());
+            this.displayPanel.add(newProcess.getProcessDisplay());
         }
 
-        displayPanel.add(new JLabel("**READY QUEUE**"));
+        this.displayPanel.add(new JLabel("**READY QUEUE**"));
         for(OSProcess readyProcess : readyQueue){
-            displayPanel.add(readyProcess.getProcessDisplay());
+            this.displayPanel.add(readyProcess.getProcessDisplay());
         }
 
-        displayPanel.add(new JLabel("**BLOCKED PROCESSES**"));
+        this.displayPanel.add(new JLabel("**BLOCKED PROCESSES**"));
         for(OSProcess blockedProcess : blocked){
-            displayPanel.add(blockedProcess.getProcessDisplay());
+            this.displayPanel.add(blockedProcess.getProcessDisplay());
         }
 
-        displayPanel.add(new JLabel("**RUNNING PROCESS**"));
+        this.displayPanel.add(new JLabel("**RUNNING PROCESS**"));
         for(OSProcess runningProcess : running){
-            displayPanel.add(runningProcess.getProcessDisplay());
+            this.displayPanel.add(runningProcess.getProcessDisplay());
         }
 
         displayPanel.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
         for(OSProcess exitedProcess : exited){
-            displayPanel.add(exitedProcess.getProcessDisplay());
+            this.displayPanel.add(exitedProcess.getProcessDisplay());
         }
+
+        return this.displayPanel;
     }
 
 }

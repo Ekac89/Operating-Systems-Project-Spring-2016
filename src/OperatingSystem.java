@@ -27,6 +27,8 @@ public class OperatingSystem extends Frame {
     static List<OSProcess> exited //processes that are finished and have left the system
                     = new ArrayList<OSProcess>();
 
+    Display displayOS;
+
     //round robin algorithm
     public void roundRobin(OSProcess enteringProcess){
         this.readyQueue.add(enteringProcess);
@@ -128,67 +130,90 @@ public class OperatingSystem extends Frame {
     public static void main(String[] args) {
 
 
+
         //making 4 random processes, each has arrival time of 1, 2, 3, 4
-        for(int p=0; p<4; p++){
-            //process size can be 1-8
-            int memorySize = ThreadLocalRandom.current().nextInt(1, 8);
-            //process can have 0 to 5 I/O requests
-            int ioRequests = ThreadLocalRandom.current().nextInt(1,5);
-            //process takes between 10-950 CYCLES to complete
-            int cycles = ThreadLocalRandom.current().nextInt(10,950);
-            //process' arrival time will be its creation
-            OSProcess randomProcess = new OSProcess(memorySize,ioRequests,cycles,p,p);
+//        for(int p=0; p<4; p++){
+//            //process size can be 1-8
+//            int memorySize = ThreadLocalRandom.current().nextInt(1, 8);
+//            //process can have 0 to 5 I/O requests
+//            int ioRequests = ThreadLocalRandom.current().nextInt(1,5);
+//            //process takes between 10-950 CYCLES to complete
+//            int cycles = ThreadLocalRandom.current().nextInt(10,950);
+//            //process' arrival time will be its creation
+//            OSProcess randomProcess = new OSProcess(memorySize,ioRequests,cycles,p,p);
+//
+//            //making the I/O requests that will interrupt it
+//            for(int i=0; i<ioRequests; i++){
+//                //I/O requests can take 25-50 cycles to complete
+//                int ioCyclesNeeded = ThreadLocalRandom.current().nextInt(25,50);
+//                //randomly chooses a cycle within the cycles the process has to interrupt
+//                int ioCycleLaunch = ThreadLocalRandom.current().nextInt(1,cycles);  //starts at cycle 1 until start of last cycle
+//
+//                randomProcess.ioRequests[i] = new IORequest(ioCyclesNeeded,ioCycleLaunch);
+//            }
+//
+//            randomProcess.setPriority(p); //priority is simply the numerical order (1,2,3,4)
+//
+//            outsideProcesses.add(randomProcess); //not entered into OS yet
+//        }
 
-            //making the I/O requests that will interrupt it
-            for(int i=0; i<ioRequests; i++){
-                //I/O requests can take 25-50 cycles to complete
-                int ioCyclesNeeded = ThreadLocalRandom.current().nextInt(25,50);
-                //randomly chooses a cycle within the cycles the process has to interrupt
-                int ioCycleLaunch = ThreadLocalRandom.current().nextInt(1,cycles);  //starts at cycle 1 until start of last cycle
-
-                randomProcess.ioRequests[i] = new IORequest(ioCyclesNeeded,ioCycleLaunch);
-            }
-
-            randomProcess.setPriority(p); //priority is simply the numerical order (1,2,3,4)
-
-            outsideProcesses.add(randomProcess); //not entered into OS yet
-        }
-
-
-
-
+        OSClock testClock = new OSClock();
 
 
+        OSProcess testProcess = new OSProcess(1,10,4,100, 0);
 
 
-        /** Display to make process */
+        outsideProcesses = new ArrayList<>();
+        newProcesses = new ArrayList<>();
+        readyQueue = new ArrayList<>();
+        blocked = new ArrayList<>();
+        exited = new ArrayList<>();
+        running = new ArrayList<>();
+
+        outsideProcesses.add(testProcess);
+
         JFrame frame = new JFrame("Group 3 Operating System Simulator");
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));  //layout
-
-        // JLabel label = new JLabel("label");
-
-        JButton button = new JButton();
-        button.setText("worthless button that will eventually make button");
-
-        panel.add(new JLabel("OSProcess Size: "));
-        panel.add(new JTextField(2));
-        panel.add(new JLabel("Time needed for process: "));
-        panel.add(new JTextField(2));
-        panel.add(new JLabel("I/O Requests Needed: "));
-        panel.add(new JTextField(2));
-        panel.add(new JLabel("OSProcess Size: "));
-        panel.add(new JTextField(2));
-
-
-        panel.add(button);
-
-
-        frame.add(panel);
+        Display display = new Display();
+        frame.add(display.getDisplayPanel());
         frame.setSize(400, 500);
         frame.setLocationRelativeTo(null);
+//        display.getDisplayPanel().setLayout(new BoxLayout(display.getDisplayPanel(), BoxLayout.PAGE_AXIS));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+
+
+
+
+
+//        /** Display to make process */
+//        JFrame frame = new JFrame("Group 3 Operating System Simulator");
+//
+//        JPanel panel = new JPanel();
+//        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));  //layout
+//
+//        // JLabel label = new JLabel("label");
+//
+//        JButton button = new JButton();
+//        button.setText("worthless button that will eventually make button");
+//
+//        panel.add(new JLabel("OSProcess Size: "));
+//        panel.add(new JTextField(2));
+//        panel.add(new JLabel("Time needed for process: "));
+//        panel.add(new JTextField(2));
+//        panel.add(new JLabel("I/O Requests Needed: "));
+//        panel.add(new JTextField(2));
+//        panel.add(new JLabel("OSProcess Size: "));
+//        panel.add(new JTextField(2));
+//
+//
+//        panel.add(button);
+//
+//
+//        frame.add(panel);
+//        frame.setSize(400, 500);
+//        frame.setLocationRelativeTo(null);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setVisible(true);
     }
 }

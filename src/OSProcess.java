@@ -28,7 +28,7 @@ public class OSProcess{
     Integer[] startCycleTimeIO; //when, by cycle, each IO will start on
     //**********************************************************
     //Display -- this information needs to be displayed for each process
-    JLabel processDisplay;
+    JLabel processDisplay = new JLabel();
 
     double TIME_NEEDED; //total amount of time this process needs in seconds
     double timeUsed; //amount of time this process has already used
@@ -111,6 +111,7 @@ public class OSProcess{
 
     //update display for this particular process
     public void updateProcessDisplay(){
+        this.processDisplay.setLayout(new BoxLayout(processDisplay, ));
         this.processDisplay.setText("<html>" +
                 "Process ID: " + this.processID
                 + "<br>Total CPU time needed: " + this.TIME_NEEDED
