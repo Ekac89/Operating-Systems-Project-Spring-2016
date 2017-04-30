@@ -111,7 +111,7 @@ public class OSProcess{
 
     //update display for this particular process
     public void updateProcessDisplay(){
-        this.processDisplay.setLayout(new BoxLayout(processDisplay, ));
+        this.processDisplay.setLayout(new BoxLayout(processDisplay, SwingConstants.CENTER));
         this.processDisplay.setText("<html>" +
                 "Process ID: " + this.processID
                 + "<br>Total CPU time needed: " + this.TIME_NEEDED

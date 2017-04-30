@@ -1,4 +1,8 @@
+import org.w3c.dom.Document;
+
 import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +41,15 @@ public class OperatingSystem extends Frame {
 
     }
 
-    //sets up OS
-    public void startUp(){
+    //sets up OS and initializes all needed objects/lists
+    public void OSStartUp(){
+        outsideProcesses = new ArrayList<>();
+        newProcesses = new ArrayList<>();
+        readyQueue = new ArrayList<>();
+        blocked = new ArrayList<>();
+        exited = new ArrayList<>();
+        running = new ArrayList<>();
+
         OSClock.clock = 0;
         currentProcessNumber = 0;
 
@@ -86,16 +97,7 @@ public class OperatingSystem extends Frame {
         }
     }
 
-    //going through processes and checking if it's time for them to enter
-    public void arrivalCheck(){
-        for(int p=0; p<outsideProcesses.size(); p++) {
-            if (outsideProcesses.get(p).getARRIVAL_TIME() == OSClock.clock) {
-                processesEntered++;
-                outsideProcesses.get(p).setPriority(processesEntered); //setting the priority if process is arriving based on how many processes have entered already (FCFS)
-                newProcesses.add(outsideProcesses.remove(p)); //entering process in system
-            }
-        }
-    }
+
 
     /**
       Display update methods
@@ -128,10 +130,48 @@ public class OperatingSystem extends Frame {
      *  -process exits system
      */
     public static void main(String[] args) {
+        /**Setup of OS**/
+        //setting up OS
+        outsideProcesses = new ArrayList<>();
+        newProcesses = new ArrayList<>();
+        readyQueue = new ArrayList<>();
+        blocked = new ArrayList<>();
+        exited = new ArrayList<>();
+        running = new ArrayList<>();
+
+        OSClock.clock = 0;
+
+        //setting up OS Display
+        JFrame frame = new JFrame("Group 3 Operating System Simulator");
+
+        Display display = new Display();
+
+        frame.setSize(400, 500);
+        frame.setLocationRelativeTo(null);
+        frame.add(display.getDisplayPanel());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+
+        //if step forward once button is pressed
+        if(display.step1butt.getModel().isPressed()){
+
+        }
+
+
+        OSProcess testProcess = new OSProcess(1,10,4,100, 0);
 
 
 
-        //making 4 random processes, each has arrival time of 1, 2, 3, 4
+
+        outsideProcesses.add(testProcess);
+
+
+
+
+
+
+//        //making 4 random processes, each has arrival time of 1, 2, 3, 4
 //        for(int p=0; p<4; p++){
 //            //process size can be 1-8
 //            int memorySize = ThreadLocalRandom.current().nextInt(1, 8);
@@ -156,33 +196,6 @@ public class OperatingSystem extends Frame {
 //
 //            outsideProcesses.add(randomProcess); //not entered into OS yet
 //        }
-
-        OSClock testClock = new OSClock();
-
-
-        OSProcess testProcess = new OSProcess(1,10,4,100, 0);
-
-
-        outsideProcesses = new ArrayList<>();
-        newProcesses = new ArrayList<>();
-        readyQueue = new ArrayList<>();
-        blocked = new ArrayList<>();
-        exited = new ArrayList<>();
-        running = new ArrayList<>();
-
-        outsideProcesses.add(testProcess);
-
-        JFrame frame = new JFrame("Group 3 Operating System Simulator");
-
-        Display display = new Display();
-        frame.add(display.getDisplayPanel());
-        frame.setSize(400, 500);
-        frame.setLocationRelativeTo(null);
-//        display.getDisplayPanel().setLayout(new BoxLayout(display.getDisplayPanel(), BoxLayout.PAGE_AXIS));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-
 
 
 

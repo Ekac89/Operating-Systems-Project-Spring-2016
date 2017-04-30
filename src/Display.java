@@ -29,12 +29,16 @@ public class Display extends OperatingSystem{
     JFrame displayFrame;
     JPanel displayPanel;
 
+    JButton step1butt;
+
     public Display(){
         this.displayPanel = new JPanel();
     }
 
     public JPanel getDisplayPanel(){
 //        displayFrame.setTitle("Group 3 Operating System Simulator");
+        this.displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
+
         this.displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
 
         this.displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
@@ -66,6 +70,10 @@ public class Display extends OperatingSystem{
         for(OSProcess exitedProcess : exited){
             this.displayPanel.add(exitedProcess.getProcessDisplay());
         }
+
+        step1butt = new JButton();
+        step1butt.setText("1 Step Forward");
+        this.displayPanel.add(step1butt);
 
         return this.displayPanel;
     }
