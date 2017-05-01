@@ -82,7 +82,7 @@ public class OSProcess{
     public int checkForIO(){
         for(int i =0; i<IO_REQUESTS; i++){
             //check if it's time for an I/O interrupt (or tech past time)
-            if(ioRequests[i].getPRCS_CYCLE_LAUNCH() <= this.cycleCurrent){
+            if(ioRequests[i].getPRCS_CYCLE_LAUNCH() <= this.cycleCurrent && !ioRequests[i].complete){
                 return i; //returns I/O process in array that needs to be executed
             }
         }

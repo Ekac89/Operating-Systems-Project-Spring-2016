@@ -129,8 +129,11 @@ public class OperatingSystem extends RoundRobin{
 //        OSClock.clock = 0;
 
         osRoundRobin = new RoundRobin();
+        displayOS = new Display();
 
-        OSProcess testProcess = new OSProcess(OSClock.clock, 1);
+        OSProcess testProcess = new OSProcess(1, 16,1,100);
+        IORequest testIO = new IORequest(25,50);
+        testProcess.ioRequests[0] = testIO;
 
         displayOS.getDisplayPanel();
 
@@ -141,6 +144,14 @@ public class OperatingSystem extends RoundRobin{
 
 
         osRoundRobin.enterProcess();
+        displayOS.getDisplayPanel();
+        osRoundRobin.newProcessToReady();
+        displayOS.getDisplayPanel();
+        osRoundRobin.readyQueueToRun();
+        displayOS.getDisplayPanel();
+        osRoundRobin.runRunningProcess();
+        displayOS.getDisplayPanel();
+
 
 
 //        //setting up OS Display

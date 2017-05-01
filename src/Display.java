@@ -90,6 +90,10 @@ public class Display extends OperatingSystem{
 
     //updates the entire OS frame
     public void updateFrame(){
+  //      this.displayFrame.removeAll();
+//        this.displayFrame.add(this.displayPanel);
+      displayFrame.revalidate();
+       displayFrame.repaint();
     }
 
 }
