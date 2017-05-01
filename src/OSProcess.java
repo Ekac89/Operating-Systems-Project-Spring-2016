@@ -193,6 +193,7 @@ public class OSProcess{
                 + "<br>CPU Time Used: " + timeLeft
                 + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
                 + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
+                + "<br>Current state: " + stateToString()
                 + "</html>");
     }
 

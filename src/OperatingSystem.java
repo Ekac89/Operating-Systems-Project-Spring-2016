@@ -117,25 +117,27 @@ public class OperatingSystem extends RoundRobin{
 
 //        OSClock.clock = 0;
 
-        ALL_PROCESSES = new ArrayList<>();
+//        ALL_PROCESSES = new ArrayList<>();
+//
+//        outsideProcesses = new ArrayList<>();
+//        newProcesses = new ArrayList<>();
+//        readyQueue = new ArrayList<>();
+//        blocked = new ArrayList<>();
+//        exited = new ArrayList<>();
+//        running = new ArrayList<>();
+//
+//        OSClock.clock = 0;
 
-        outsideProcesses = new ArrayList<>();
-        newProcesses = new ArrayList<>();
-        readyQueue = new ArrayList<>();
-        blocked = new ArrayList<>();
-        exited = new ArrayList<>();
-        running = new ArrayList<>();
-
-        OSClock.clock = 0;
+        osRoundRobin = new RoundRobin();
 
         OSProcess testProcess = new OSProcess(OSClock.clock, 1);
 
-
+        displayOS.getDisplayPanel();
 
 
         outsideProcesses.add(testProcess);
 
-        displayOS.getDisplayPanel();
+
 
 
         osRoundRobin.enterProcess();

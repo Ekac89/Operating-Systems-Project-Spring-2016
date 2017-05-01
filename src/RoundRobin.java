@@ -25,13 +25,24 @@ public class RoundRobin{
             = new ArrayList<OSProcess>();
 
 
+    public RoundRobin(){
+        this.ALL_PROCESSES = new ArrayList<>();
 
+        this.outsideProcesses = new ArrayList<>();
+        this.newProcesses = new ArrayList<>();
+        this.readyQueue = new ArrayList<>();
+        this.blocked = new ArrayList<>();
+        this.exited = new ArrayList<>();
+        this.running = new ArrayList<>();
+
+        OSClock.clock = 0;
+    }
 
     //entering in next process
     public void enterProcess(){
                 processesEntered++;
                 newProcesses.add(outsideProcesses.remove(0)); //entering process in system
-
+                newProcesses.get(newProcesses.size()-1).setState(2);
                 displayOS.getDisplayPanel(); //TODO:not sure if this will work/update display correctly
     }
 
@@ -39,7 +50,7 @@ public class RoundRobin{
     //going through new processes to set them to ready
     public void newProcessCheck(){
         for(OSProcess newProcess : newProcesses){
-            newProcess.setState(2); //setting to ready
+            newProcesses.get(0).setState(2); //setting to ready
             readyQueue.add(newProcess); //adding to ready queue
             newProcesses.remove(newProcess); //removing from new process queue
 
