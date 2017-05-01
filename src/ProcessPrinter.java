@@ -6,10 +6,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class ProcessPrinter {
-
     static FileWriter writer = null;
     static FileWriter Pullwriter = null;
     public static void main(String[] args) {
+
+        int[][] processes = new int[60][60];
 
         try {
             writer = new FileWriter("final.txt");
@@ -29,15 +30,19 @@ public class ProcessPrinter {
             id ++;
             createProcess(id, writer, Pullwriter);
         }
+
         try {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }        try {
+        }
+        try {
             Pullwriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        ReadInProcess(processes);
     }
 
     public static int createProcess(int id, FileWriter writer, FileWriter Pullwriter){  // Create Process
@@ -75,16 +80,24 @@ public class ProcessPrinter {
 
         return (id);
     }
-    public static int[][] ReadInProcess(int id, FileWriter writer){  // Create Process
-        File file = new File("10_Random");
-        int [][] processes;
+    public static int[][] ReadInProcess(int [][] processes){  // Create Process
+        File file = new File("pullFromMe.txt");
+    int i = 0;
         try {
 
             Scanner sc = new Scanner(file);
 
             while (sc.hasNextLine()) {
-                int i = sc.nextInt();
-                System.out.println(i);
+                //String i = sc.nextLine();
+                //System.out.println(i);
+                String[] tokens = sc.nextLine().split(":");
+                String last = tokens[tokens.length - 1];
+                for (int j = 0; j < tokens.length ; j++) {
+                    processes[i][j] = Integer.parseInt(tokens [j]);
+                    //System.out.println(tokens [j]);
+                }
+                i++;
+
             }
             sc.close();
         }
@@ -92,6 +105,13 @@ public class ProcessPrinter {
             e.printStackTrace();
         }
 
+        System.out.println("print lbl");
+        for (i = 0; i < 60; i++) {
+            for (int j = 0; j < 4 ; j++) {
+                //System.out.print(processes[i][j]);
+            }
+            //System.out.println();
+        }
 
 
 
