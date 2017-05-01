@@ -1,11 +1,16 @@
+import java.io.FileWriter;
 import java.util.Random;
+import java.io.IOException;
 
-/**
+/**import java.io.BufferedReader;
+
  * Created by Chris on 4/26/2017.
  */
 public class Memory {
 
+
         public static void main(String[] args) {
+
             int[] memory = new int[16];
             int i = 0;
             int totalcount = 0;
@@ -14,7 +19,6 @@ public class Memory {
             Random randomGenerator = new Random();
             int id = 0;
             int tester = 100;
-            PrintProcessFromMem(memory);
             for (int test = 0; test < tester; test++) {
                 id ++;
                 int adddelete = (randomGenerator.nextInt(2));
@@ -28,7 +32,11 @@ public class Memory {
                     //System.out.print("remove = " + remove + " ");
                     RemoveProcessFromMem(remove, memory);
                 }
-                PrintProcessFromMem(memory);
+                try {
+                    PrintProcessFromMem(memory);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         //add
@@ -76,11 +84,33 @@ public class Memory {
             return (memory);
         }
         //print
-        public static int[] PrintProcessFromMem(int[] memory) {
+        public static int[] PrintProcessFromMem(int[] memory) throws IOException {
+
+
+
+            FileWriter writer = null;
+
+            writer = new FileWriter("final.txt");
             for (int c = 0; c <= 15; ++c) {
+                try {
+                    writer.write(memory[c] + " | ");
+
+
+
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+               // System.setOut(memory[c] + " | ");
                 System.out.print(memory[c] + " | ");
             }
             System.out.println();
+            try {
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return (memory);
         }
     }
