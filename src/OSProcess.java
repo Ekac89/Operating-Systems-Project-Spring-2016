@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -9,7 +10,7 @@ public class OSProcess{
     int PROCESS_SIZE; //memory size of process (can be 1-8MB in size)
 
     //OSProcess Control Block (PCB) *****************************
-    int processID; //unique identifier for each process (at most 60 processes)
+    int PROCESS_ID; //unique identifier for each process (at most 60 processes) (will simply be order in which entered)
     int pointerIndex; //array index that represents location in memory
     int state; //number represents process' current state:
                     //1 = new
@@ -35,35 +36,35 @@ public class OSProcess{
     double timeLeft; //amount of time this process has left
                 //timeLeft = TIME_NEEDED - timeUsed
 
-
-    int priority; //queue position
+//not needed in our Round Robin (priority is first come first serve)
+//    int priority; //queue position
     //*************************************
 
-    int ARRIVAL_TIME; //will be set once when it arrives in RoundRobin readyQueue
+    double ARRIVAL_TIME; //will be set once when it arrives in RoundRobin readyQueue
     int CYCLES; //amount of CYCLES this process needs (can be 10-950)
                         //each cycle is 0.1 seconds, so 10 CYCLES per timeslice/timeQuantum in RoundRobin
 
-    int cyclesUsed;
+    int cycleCurrent; //current cycle that this process is on (has completed cycleCurrent-1 cycles)
     int cyclesLeft;
 
     boolean complete;
 
 
 
-    public OSProcess(int processID, int memorySize, int ioRequests, int cycles, int arrivalTime){
+    public OSProcess(int processID, int memorySize, int ioRequests, int cycles){
         this.state = 1; //process starts as 1 = new
-        this.processID = processID; //no more than 60, should be incremented by current processes entered
+        this.PROCESS_ID = processID; //no more than 60, should be incremented by current processes entered
         //TODO: instantiate pointer index
         //TODO: instantiate program counter
 
         this.PROCESS_SIZE = memorySize;
         this.IO_REQUESTS = ioRequests;
         this.CYCLES = cycles;
-        this.ARRIVAL_TIME = arrivalTime;
+        this.ARRIVAL_TIME = OSClock.clock;
 
         this.TIME_NEEDED =  cycles * 0.1;   //each cycle is 0.1 seconds
         this.timeLeft = cycles * 0.1;   //initializes amount of timeLeft
-        this.cyclesUsed = cycles;
+        this.cycleCurrent = cycles;
 
         this.ioRequestsSatisfied = 0;
         this.ioRequestsUnsatisfied = ioRequests; //all I/O Requests are unsatisfied on process create
@@ -72,30 +73,43 @@ public class OSProcess{
                 "Process ID: " + processID
                 + "<br>Total CPU Time Needed: " + TIME_NEEDED
                 + "<br>CPU Time Used: " + timeLeft
-                + "<br>Priority: " + priority
                 + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
                 + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
                 + "</html>");
     }
 
-    //can update process display 3 times
-    public void runOneCycle(){
-        //first, checks for I/O interrupt
+    //checks if it's time for an I/O interrupt and returns number of IO that needs to execute
+    public int checkForIO(){
         for(int i =0; i<IO_REQUESTS; i++){
-            if(ioRequests[i].getPRCS_CYCLE_LAUNCH() == this.cyclesUsed){
-                setState(4); //process is in block state when interrupted, updates display
-
-                ioRequests[i].runIO();
-                ioRequestsUnsatisfied--;
-                ioRequestsSatisfied++;
-
-                updateProcessDisplay(); //updates because process state was changed and I/O request made
+            //check if it's time for an I/O interrupt (or tech past time)
+            if(ioRequests[i].getPRCS_CYCLE_LAUNCH() <= this.cycleCurrent){
+                return i; //returns I/O process in array that needs to be executed
             }
         }
+        return -1; //returns -1 if no IO is ready
+    }
 
+    //runs given I/O interrupt, returns true if I/O was run
+    public boolean runIO(int ioNumber) {
+        if (ioNumber >= 0 && ioNumber <= 5) {
+            setState(4); //process is in block state when interrupted, updates display
+
+            ioRequests[ioNumber].runIO(); //run the I/O, updates clock
+            ioRequestsUnsatisfied--;
+            ioRequestsSatisfied++;
+
+            updateProcessDisplay(); //updates because process state was changed and I/O request made
+            return true; //I/O has been run
+        }else{
+            return false; //I/O hasn't been run (ioNumber passed in was -1 because no I/O ready from checkforIO())
+        }
+    }
+
+    //can update process display 3 times
+    public void runOneCycle(){
         setState(3); //state set to running, also updates process display
 
-        this.cyclesUsed++;
+        this.cycleCurrent++;
         this.cyclesLeft--;
         this.timeUsed = timeUsed + 0.1;
         this.timeLeft = timeLeft - 0.1;
@@ -113,14 +127,14 @@ public class OSProcess{
     public void updateProcessDisplay(){
         this.processDisplay.setLayout(new BoxLayout(processDisplay, SwingConstants.CENTER));
         this.processDisplay.setText("<html>" +
-                "Process ID: " + this.processID
+                "Process ID: " + this.PROCESS_ID
                 + "<br>Total CPU time needed: " + this.TIME_NEEDED
                 + "<br>CPU time used: " + this.timeLeft
-                + "<br>Priority: " + this.priority
                 + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
                 + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
                 + "<br>Current state: " + stateToString()
                 + "</html>");
+
     }
 
 
@@ -135,7 +149,7 @@ public class OSProcess{
             case 3:
                 return "RUNNING";
             case 4:
-                return "BLOCKED";
+                return "BLOCKED BY I/O REQUEST";
             case 5:
                 return "EXITED";
             default:
@@ -143,6 +157,44 @@ public class OSProcess{
         }
     }
 
+    //default constructor
+    //creating Random OSProcess, pass in current clock time
+    public OSProcess(double currentTime, int currentProcessCount){
+        this.PROCESS_ID = currentProcessCount;
+        //process' arrival time will be its creation
+        this.ARRIVAL_TIME = currentTime;
+        //process size can be 1-8
+        this.PROCESS_SIZE = ThreadLocalRandom.current().nextInt(1, 8);
+        //process can have 0 to 5 I/O requests
+        this.IO_REQUESTS = ThreadLocalRandom.current().nextInt(1,5);
+        //process takes between 10-950 CYCLES to complete
+        this.CYCLES = ThreadLocalRandom.current().nextInt(10,950);
+
+        //making the I/O requests that will interrupt it
+        for(int i=0; i<ioRequests.length; i++){
+            //I/O requests can take 25-50 cycles to complete
+            int ioCyclesNeeded = ThreadLocalRandom.current().nextInt(25,50);
+            //randomly chooses a cycle within the cycles the process has to interrupt
+            int ioCycleLaunch = ThreadLocalRandom.current().nextInt(1,this.CYCLES);  //starts at cycle 1 until start of last cycle
+
+            this.ioRequests[i] = new IORequest(ioCyclesNeeded,ioCycleLaunch);
+        }
+
+        this.TIME_NEEDED =  CYCLES * 0.1;   //each cycle is 0.1 seconds
+        this.timeLeft = CYCLES * 0.1;   //initializes amount of timeLeft
+        this.cycleCurrent = CYCLES;
+
+        this.ioRequestsSatisfied = 0;
+        this.ioRequestsUnsatisfied = IO_REQUESTS; //all I/O Requests are unsatisfied on process create
+
+        this.processDisplay.setText("<html>" +
+                "Process ID: " + PROCESS_ID
+                + "<br>Total CPU Time Needed: " + TIME_NEEDED
+                + "<br>CPU Time Used: " + timeLeft
+                + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
+                + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
+                + "</html>");
+    }
 
     //Setters
 
@@ -150,8 +202,8 @@ public class OSProcess{
         this.PROCESS_SIZE = PROCESS_SIZE;
     }
 
-    public void setProcessID(int processID) {
-        this.processID = processID;
+    public void setPROCESS_ID(int PROCESS_ID) {
+        this.PROCESS_ID = PROCESS_ID;
     }
 
     public void setPointerIndex(int pointerIndex) {
@@ -189,13 +241,14 @@ public class OSProcess{
         this.ioRequestsUnsatisfied = ioRequestsUnsatisfied;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
+    //not needed in our Round Robin (priority is first come first serve)
+//    public void setPriority(int priority) {
+//        this.priority = priority;
+//    }
 
     public void setARRIVAL_TIME(int arrival_time){this.ARRIVAL_TIME = arrival_time;}
 
-    public void setCyclesUsed(int cyclesUsed){this.cyclesUsed = cyclesUsed;}
+    public void setCycleCurrent(int cycleCurrent){this.cycleCurrent = cycleCurrent;}
 
 
     //Getters
@@ -205,8 +258,8 @@ public class OSProcess{
         return PROCESS_SIZE;
     }
 
-    public int getProcessID() {
-        return processID;
+    public int getPROCESS_ID() {
+        return PROCESS_ID;
     }
 
     public int getPointerIndex() {
@@ -245,13 +298,14 @@ public class OSProcess{
         return ioRequestsUnsatisfied;
     }
 
-    public int getPriority() {
-        return priority;
-    }
+    //not needed in our Round Robin (priority is first come first serve)
+//    public int getPriority() {
+//        return priority;
+//    }
 
-    public int getARRIVAL_TIME(){return ARRIVAL_TIME;}
+    public double getARRIVAL_TIME(){return ARRIVAL_TIME;}
 
-    public int getCyclesUsed(){return cyclesUsed;}
+    public int getCycleCurrent(){return cycleCurrent;}
 
 
     public IORequest[] getIoRequests() {

@@ -1,8 +1,4 @@
-import org.w3c.dom.Document;
-
 import javax.swing.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,34 +8,25 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * Overall abstraction for the OS
  */
-public class OperatingSystem extends Frame {
-    /**
-        Operating System methods
-     */
-
+public class OperatingSystem extends RoundRobin{
     //no more than 60 processes entered in 5-state model
-    int processesEntered = 0; //counts incoming processes, should increment for each new process entered in system
+//    int processesEntered = 0; //counts incoming processes, should increment for each new process entered in system
+//
+//    //int currentProcessNumber; //PROCESS_ID for current process, this is only process in running ArrayList
+//
+//    static List<OSProcess> outsideProcesses; //processes that haven't been entered into the system
+//    static List<OSProcess> newProcesses; //processes that have just been entered into the system
+//    static List<OSProcess> readyQueue; //processes that are ready
+//    static List<OSProcess> running; //current running process (can be 0-1 processes)
+//    static List<OSProcess> blocked; //current blocked process (can be 0-1 processes)
+//    static List<OSProcess> exited //processes that are finished and have left the system
+//                    = new ArrayList<OSProcess>();
 
-    int currentProcessNumber; //processID for current process
-    OSProcess currentProcess;
-
-    static List<OSProcess> outsideProcesses; //processes that haven't been entered into the system
-    static List<OSProcess> newProcesses; //processes that have just been entered into the system
-    static List<OSProcess> readyQueue; //processes that are ready
-    static List<OSProcess> running; //current running process (can be 0-1 processes)
-    static List<OSProcess> blocked; //current blocked process (can be 0-1 processes)
-    static List<OSProcess> exited //processes that are finished and have left the system
-                    = new ArrayList<OSProcess>();
-
-    Display displayOS;
-
-    //round robin algorithm
-    public void roundRobin(OSProcess enteringProcess){
-        this.readyQueue.add(enteringProcess);
+//    static Display displayOS = new Display();
+//    static JFrame displayFrameOS = new JFrame("Group 3 Operating System Simulator");
 
 
 
-    }
 
     //sets up OS and initializes all needed objects/lists
     public void OSStartUp(){
@@ -51,7 +38,7 @@ public class OperatingSystem extends Frame {
         running = new ArrayList<>();
 
         OSClock.clock = 0;
-        currentProcessNumber = 0;
+//        currentProcessNumber = 0;
 
     }
 
@@ -59,43 +46,29 @@ public class OperatingSystem extends Frame {
      Process handling methods
      */
 
-    //creating Random OSProcess, pass in current clock time
-    public OSProcess createRandomProcess(int currentTime, int currentProcessCount){
-        //process size can be 1-8
-        int memorySize = ThreadLocalRandom.current().nextInt(1, 8);
-        //process can have 0 to 5 I/O requests
-        int ioRequests = ThreadLocalRandom.current().nextInt(1,5);
-        //process takes between 10-950 CYCLES to complete
-        int cycles = ThreadLocalRandom.current().nextInt(10,950);
-        //process' arrival time will be its creation
-        OSProcess randomProcess = new OSProcess(memorySize,ioRequests,cycles,currentTime,currentProcessCount);
-
-        //making the I/O requests that will interrupt it
-        for(int i=0; i<ioRequests; i++){
-            //I/O requests can take 25-50 cycles to complete
-            int ioCyclesNeeded = ThreadLocalRandom.current().nextInt(25,50);
-            //randomly chooses a cycle within the cycles the process has to interrupt
-            int ioCycleLaunch = ThreadLocalRandom.current().nextInt(1,cycles);  //starts at cycle 1 until start of last cycle
-
-            randomProcess.ioRequests[i] = new IORequest(ioCyclesNeeded,ioCycleLaunch);
-        }
-
-        return randomProcess;
-    }
-
-    //run a process
-    public void runProcess(OSProcess currentProcess){
-        currentProcessNumber = currentProcess.getProcessID();
-
-        //run 10 cycles unless process complete
-        for(int c=1; c<=10; c++){
-            currentProcess.runOneCycle();
-            //checking if process is done after this cycle
-            if(currentProcess.complete == true){
-                break;
-            }
-        }
-    }
+//    //creating Random OSProcess, pass in current clock time
+//    public OSProcess createRandomProcess(int currentTime, int currentProcessCount){
+//        //process size can be 1-8
+//        int memorySize = ThreadLocalRandom.current().nextInt(1, 8);
+//        //process can have 0 to 5 I/O requests
+//        int ioRequests = ThreadLocalRandom.current().nextInt(1,5);
+//        //process takes between 10-950 CYCLES to complete
+//        int cycles = ThreadLocalRandom.current().nextInt(10,950);
+//        //process' arrival time will be its creation
+//        OSProcess randomProcess = new OSProcess(currentProcessCount, memorySize, ioRequests, cycles);
+//
+//        //making the I/O requests that will interrupt it
+//        for(int i=0; i<ioRequests; i++){
+//            //I/O requests can take 25-50 cycles to complete
+//            int ioCyclesNeeded = ThreadLocalRandom.current().nextInt(25,50);
+//            //randomly chooses a cycle within the cycles the process has to interrupt
+//            int ioCycleLaunch = ThreadLocalRandom.current().nextInt(1,cycles);  //starts at cycle 1 until start of last cycle
+//
+//            randomProcess.ioRequests[i] = new IORequest(ioCyclesNeeded,ioCycleLaunch);
+//        }
+//
+//        return randomProcess;
+//    }
 
 
 
@@ -129,9 +102,23 @@ public class OperatingSystem extends Frame {
      *  -memory deallocated
      *  -process exits system
      */
+
+    public static RoundRobin osRoundRobin;
+
     public static void main(String[] args) {
         /**Setup of OS**/
-        //setting up OS
+//        //setting up OS
+//        outsideProcesses = new ArrayList<>();
+//        newProcesses = new ArrayList<>();
+//        readyQueue = new ArrayList<>();
+//        blocked = new ArrayList<>();
+//        exited = new ArrayList<>();
+//        running = new ArrayList<>();
+
+//        OSClock.clock = 0;
+
+        ALL_PROCESSES = new ArrayList<>();
+
         outsideProcesses = new ArrayList<>();
         newProcesses = new ArrayList<>();
         readyQueue = new ArrayList<>();
@@ -141,30 +128,38 @@ public class OperatingSystem extends Frame {
 
         OSClock.clock = 0;
 
-        //setting up OS Display
-        JFrame frame = new JFrame("Group 3 Operating System Simulator");
-
-        Display display = new Display();
-
-        frame.setSize(400, 500);
-        frame.setLocationRelativeTo(null);
-        frame.add(display.getDisplayPanel());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-
-        //if step forward once button is pressed
-        if(display.step1butt.getModel().isPressed()){
-
-        }
-
-
-        OSProcess testProcess = new OSProcess(1,10,4,100, 0);
+        OSProcess testProcess = new OSProcess(OSClock.clock, 1);
 
 
 
 
         outsideProcesses.add(testProcess);
+
+        displayOS.getDisplayPanel();
+
+
+        osRoundRobin.enterProcess();
+
+
+//        //setting up OS Display
+//        JFrame displayFrameOS = new JFrame("Group 3 Operating System Simulator");
+
+//        Display displayOS = new Display();
+
+//        displayFrameOS.setSize(400, 500);
+//        displayFrameOS.setLocationRelativeTo(null);
+//        displayFrameOS.add(displayOS.getDisplayPanel());
+//        displayFrameOS.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        displayFrameOS.setVisible(true);
+
+
+        //if step forward once button is pressed
+        if(displayOS.step1butt.getModel().isPressed()){
+
+        }
+
+
+
 
 
 
@@ -200,7 +195,7 @@ public class OperatingSystem extends Frame {
 
 
 //        /** Display to make process */
-//        JFrame frame = new JFrame("Group 3 Operating System Simulator");
+//        JFrame displayFrameOS = new JFrame("Group 3 Operating System Simulator");
 //
 //        JPanel panel = new JPanel();
 //        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));  //layout
@@ -223,10 +218,10 @@ public class OperatingSystem extends Frame {
 //        panel.add(button);
 //
 //
-//        frame.add(panel);
-//        frame.setSize(400, 500);
-//        frame.setLocationRelativeTo(null);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setVisible(true);
+//        displayFrameOS.add(panel);
+//        displayFrameOS.setSize(400, 500);
+//        displayFrameOS.setLocationRelativeTo(null);
+//        displayFrameOS.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        displayFrameOS.setVisible(true);
     }
 }
