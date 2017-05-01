@@ -26,8 +26,8 @@ import java.awt.*;
 
 public class Display extends OperatingSystem{
 
-    JFrame displayFrame;
-    JPanel displayPanel;
+    static JFrame displayFrame = new JFrame("Group 3 Operating System Simulator");
+    static JPanel displayPanel;
 
     JButton step1butt;
 
@@ -35,7 +35,7 @@ public class Display extends OperatingSystem{
         this.displayPanel = new JPanel();
     }
 
-    public JPanel getDisplayPanel(){
+    public JFrame getDisplayPanel(){
 //        displayFrame.setTitle("Group 3 Operating System Simulator");
         this.displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
 
@@ -75,7 +75,21 @@ public class Display extends OperatingSystem{
         step1butt.setText("1 Step Forward");
         this.displayPanel.add(step1butt);
 
-        return this.displayPanel;
+//        this.displayFrame.removeAll();
+        this.displayFrame.add(this.displayPanel);
+//        this.displayFrame.revalidate();
+//        this.displayFrame.repaint();
+
+        this.displayFrame.setSize(400, 500);
+        this.displayFrame.setLocationRelativeTo(null);
+        this.displayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.displayFrame.setVisible(true);
+
+        return this.displayFrame;
+    }
+
+    //updates the entire OS frame
+    public void updateFrame(){
     }
 
 }
