@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -245,12 +247,16 @@ public class OperatingSystem extends RoundRobin{
         IORequest testIO = new IORequest(25, 50);
         testProcess1.ioRequests[0] = testIO;
         //test process 2
-        OSProcess testProcess2 = new OSProcess(2, 16, 3, 100);
+        OSProcess testProcess2 = new OSProcess(2, 16, 5, 100);
         IORequest testIO2 = new IORequest(25, 70);
         IORequest testIO3 = new IORequest(40, 20);
+        IORequest testIO4 = new IORequest(30, 80);
+        IORequest testIO5 = new IORequest(100, 99);
         testProcess2.ioRequests[0] = testIO;
         testProcess2.ioRequests[1] = testIO2;
         testProcess2.ioRequests[2] = testIO3;
+        testProcess2.ioRequests[3] = testIO4;
+        testProcess2.ioRequests[4] = testIO5;
 
         /**setting up processes */
         outsideProcesses.add(testProcess1);
@@ -261,7 +267,7 @@ public class OperatingSystem extends RoundRobin{
         getDisplayPanel();
 
 //        /**Manual Round Robin**/
-//        //osRoundrobin.checkForNewProcess(); //checks if theres memory for new process //TODO: not implemented in RoundRobin.java (commented out)
+//        //osRoundRobin.checkForNewProcess(); //checks if theres memory for new process //TODO: not implemented in RoundRobin.java (commented out)
 //        osRoundRobin.enterProcess(); //enters testProcess1
 //        osRoundRobin.newProcessToReady(); //moves testProcess1 to ready
 //        osRoundRobin.enterProcess(); //enters testProcess2

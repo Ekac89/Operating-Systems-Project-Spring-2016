@@ -95,7 +95,7 @@ public class RoundRobin {
 
     //checks running process for IO interrupt
     public void runningIOCheck(){
-        //first, checks for I/O interrupt, even if there is multiple
+        //first, checks for I/O interrupt
         if(running.get(0).checkForIO()>=0){
             blocked.add(running.remove(0)); //removes current process and places it in blocked queue
             blocked.get(0).runIO(blocked.get(0).checkForIO()); //runs I/O interrupt and changes process state to blocked

@@ -83,7 +83,7 @@ public class OSProcess{
     public int checkForIO(){
         for(int i =0; i<IO_REQUESTS; i++){
             //check if it's time for an I/O interrupt (or tech past time)
-            if(ioRequests[i].getPRCS_CYCLE_LAUNCH() <= this.cycleCurrent && !ioRequests[i].complete){
+            if(ioRequests[i].getPRCS_CYCLE_LAUNCH() == this.cycleCurrent && !ioRequests[i].complete){
                 return i; //returns I/O process in array that needs to be executed
             }
         }
@@ -92,14 +92,14 @@ public class OSProcess{
 
     //runs given I/O interrupt, returns true if I/O was run
     public boolean runIO(int ioNumber) {
-        if (ioNumber >= 0 && ioNumber <= 5) {
-            setState(4); //process is in block state when interrupted, updates display
+        if (ioNumber >= 0 && ioNumber <= 4) {
+            this.setState(4); //process is in block state when interrupted, updates display
 
             ioRequests[ioNumber].satisfyIO(); //run the I/O, updates clock
             ioRequestsUnsatisfied--;
             ioRequestsSatisfied++;
 
-            updateProcessDisplay(); //updates because process state was changed and I/O request made
+            this.updateProcessDisplay(); //updates because process state was changed and I/O request made
             return true; //I/O has been run
         }else{
             return false; //I/O hasn't been run (ioNumber passed in was -1 because no I/O ready from checkforIO())
