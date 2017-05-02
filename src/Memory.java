@@ -15,11 +15,8 @@
             AddProcessFromMem(Size, memory, id);
             RemoveProcessFromMem(id, memory);
 
-            try {
                 PrintProcessFromMem(memory);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
 
         }
         //add
@@ -55,22 +52,15 @@
             return (memory);
         }
         //print
-        public static int[] PrintProcessFromMem(int[] memory) throws IOException {
-            FileWriter writer = null;
-            writer = new FileWriter("final.txt");
+        public static int[] PrintProcessFromMem(int[] memory) {
+
             for (int c = 0; c <= 15; ++c) {
-                try {
-                    writer.write(memory[c] + " | ");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                System.out.println(memory[c] + " | ");
             }
+
             System.out.println();
-            try {
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
             return (memory);
         }
     }

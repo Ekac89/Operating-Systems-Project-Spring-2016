@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,9 +10,10 @@ import java.util.List;
 public class RoundRobin {
 
     int TIME_QUANTUM = 1; //1 second for timeslice
-
+    static int hit = 0;
     static int processesEntered = 0; //counts incoming processes, should increment for each new process entered in system
 
+    static int[] memory = new int[16];
     static List<OSProcess> ALL_PROCESSES; //all processes and their state/info before being entered
 
     static List<OSProcess> outsideProcesses; //processes that haven't been entered into the system
@@ -38,19 +40,74 @@ public class RoundRobin {
 
     //TODO: set up check to see if there's memory enough for a new process, THEN call enterProcess()
     //checking if there's room for a new process; returns true if room AND if no next outside process
-//    public boolean checkForMemory(){
-//        //if there are any more outsideProcesses
-//      if(outsideProcesses.size()>0) {
-//          if (room in memory){ //TODO: check for memory
-//              return true; //found a new process
-//          }else{
-//              //don't enter in process because not enough memor
-//              return false; //no new process
-//          }
-//      }else{
-//          return true; //returns true if no processes
-//      }
-//    }
+    public static boolean checkForMemory(){
+        //if there are any more outsideProcesses
+
+      if(outsideProcesses.size()>0) {
+
+          AddProcessFromMem(outsideProcesses.get(0).PROCESS_SIZE, memory, outsideProcesses.get(0).PROCESS_ID);
+
+          PrintProcessFromMem(memory);
+          if (hit == 1) { //TODO: check for memory
+              hit = 0;
+              PrintProcessFromMem(memory);
+              return true; //found a new process
+          }else{
+              PrintProcessFromMem(memory);
+              //don't enter in process because not enough memor
+              return false; //no new process
+          }
+      }else{
+
+          PrintProcessFromMem(memory);
+          return true; //returns true if no processes
+      }
+
+    }
+    public static int[]  AddProcessFromMem(int Size, int[] memory, int id) {
+        int MemCount = 0;
+        if (Size <= 15) {
+            for (int c = 0; c <= 15; c++) {
+                if (memory[c] == 0) {
+                    MemCount++;
+                    if (MemCount == Size) {
+                        for (int i = 0; i < MemCount; i++) {
+                            hit = 1; // found room in mem
+                            memory[c - i] = id;
+                        }
+                        c = 17;
+                    }
+                }else if (memory[c] != 0) {
+                    MemCount = 0;
+                }
+            }
+        }
+        return (memory);
+    }
+    //remove
+    public static int[] RemoveProcessFromMem(int id, int[] memory) {
+
+        for (int c = 0; c <= 15; c++){
+            if (memory[c] == id) {
+                memory[c] = 0;
+            }
+            if (memory[c] == 0) {
+            }
+        }
+        return (memory);
+    }
+    //print
+    public static int[] PrintProcessFromMem(int[] memory) {
+
+        for (int c = 0; c <= 15; ++c) {
+
+            System.out.println(memory[c] + " | ");
+        }
+
+        System.out.println();
+
+        return (memory);
+    }
 
     //entering in next process on outside queue; returns false if no more outside processes
     public boolean enterProcess(){
