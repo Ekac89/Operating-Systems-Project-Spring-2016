@@ -137,6 +137,11 @@ public class OSProcess{
 
     }
 
+    //returns simple string of all process information (instead of JLabel)
+    public String processDisplayToString(){
+       return this.processDisplay.getText();
+    }
+
 
 
     //converts current state to a readable string

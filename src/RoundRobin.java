@@ -7,8 +7,6 @@ import java.util.List;
  */
 public class RoundRobin{
 
-    static Display displayOS;
-
     int TIME_QUANTUM = 1; //1 second for timeslice
 
     static int processesEntered = 0; //counts incoming processes, should increment for each new process entered in system
@@ -43,7 +41,7 @@ public class RoundRobin{
                 processesEntered++;
                 newProcesses.add(outsideProcesses.remove(0)); //entering process in system
                 newProcesses.get(newProcesses.size()-1).setState(2);
-                displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
+               // displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
     }
 
 
@@ -54,7 +52,7 @@ public class RoundRobin{
             readyQueue.add(newProcesses.get(0)); //adding to ready queue
             newProcesses.remove(newProcesses.get(0)); //removing from new process queue
 
-      //      displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
+           // displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
 //        }
     }
 
@@ -62,7 +60,7 @@ public class RoundRobin{
     public void readyQueueToRun(){
         running.add(readyQueue.remove(0));
         running.get(0).setState(3); //setting state to running, updates process display
-     //   displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
+       // displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
         runningIOCheck(); //checks if process has an I/O interrupt right out of the gate.
     }
 
@@ -73,11 +71,10 @@ public class RoundRobin{
             blocked.add(running.remove(0)); //removes current process and places it in blocked queue
             blocked.get(0).runIO(blocked.get(0).checkForIO()); //runs I/O interrupt and changes process state to blocked
                                                                         //also updates process display, clock (when running IO, time passes)
-        //    displayOS.getDisplayPanel(); //TODO:not sure if this will work/update display correctly
+            //displayOS.getDisplayPanel(); //TODO:not sure if this will work/update display correctly
             running.add(blocked.get(0)); //done with I/O, add back to running
             running.get(0).setState(3); //setting state to running, updates process display
-        //    displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
-
+           // displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
         }
     }
 
@@ -93,10 +90,12 @@ public class RoundRobin{
             if(running.get(0).complete == true){
                 exited.add(running.remove(0)); //process exits
                 exited.get(exited.size()).setState(5); //sets this last exited process to state exited, updates display
-            //    displayOS.updateFrame();//TODO:not sure if this will work/update display correctly
+               // displayOS.updateFrame();//TODO:not sure if this will work/update display correctly
                 break;
             }
         }
+        running.get(0).setState(2); //setting state back to ready
+        readyQueue.add(running.get(0)); //places process on readyQueue after it's done running
     }
 
 
