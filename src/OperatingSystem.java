@@ -251,7 +251,15 @@ public class OperatingSystem extends RoundRobin{
         testProcess2.ioRequests[0] = testIO;
         testProcess2.ioRequests[1] = testIO2;
         testProcess2.ioRequests[2] = testIO3;
+        for(int i = 0; i < 60; i++) {
+            OSProcess testProcess = new OSProcess(processes[i][0], processes[i][1],processes[i][3],processes[i][2]);
+            IORequest testIO5 = new IORequest(25,50);
+            testProcess.ioRequests[0] = testIO;
 
+            System.out.println("***** added to outside process****");
+            outsideProcesses.add(testProcess);
+        }
+        RoundRobin.checkForMemory();
         /**setting up processes */
         outsideProcesses.add(testProcess1);
         outsideProcesses.add(testProcess2);
