@@ -123,89 +123,89 @@ public class OperatingSystem extends RoundRobin{
 
     /**
       Display update methods
-     */
-
-    static JFrame displayFrame = new JFrame("Group 3 Operating System Simulator");
-    static JPanel displayPanel = new JPanel();
-
-    static JButton step1butt;
-
-
-   static public JFrame getDisplayPanel(){
-
-//        displayFrame.setTitle("Group 3 Operating System Simulator");
-       displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
-
-       displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
-       System.out.println("Clock Time: " + OSClock.clock);
-        System.out.println("**UNENTERED PROCESSES**");
-       displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
-        for(OSProcess unenteredProcess : outsideProcesses){
-            displayPanel.add(unenteredProcess.getProcessDisplay());
-            System.out.println(unenteredProcess.processDisplayToString());
-            System.out.println();
-        }
-       System.out.println("**NEW PROCESSES**");
-       displayPanel.add(new JLabel("**NEW PROCESSES**"));
-        for(OSProcess newProcess : newProcesses){
-            displayPanel.add(newProcess.getProcessDisplay());
-            System.out.println(newProcess.processDisplayToString());
-            System.out.println();
-        }
-       System.out.println("**READY QUEUE**");
-       displayPanel.add(new JLabel("**READY QUEUE**"));
-        for(OSProcess readyProcess : readyQueue){
-            displayPanel.add(readyProcess.getProcessDisplay());
-            System.out.println(readyProcess.processDisplayToString());
-            System.out.println();
-        }
-       System.out.println("**BLOCKED PROCESSES**");
-       displayFrame.add(new JLabel("**BLOCKED PROCESSES**"));
-        for(OSProcess blockedProcess : blocked){
-            displayPanel.add(blockedProcess.getProcessDisplay());
-            System.out.println(blockedProcess.processDisplayToString());
-            System.out.println();
-        }
-       System.out.println("**RUNNING PROCESS**");
-       displayFrame.add(new JLabel("**RUNNING PROCESS**"));
-        for(OSProcess runningProcess : running){
-            displayPanel.add(runningProcess.getProcessDisplay());
-            System.out.println(runningProcess.processDisplayToString());
-            System.out.println();
-        }
-       System.out.println("**FINISHED/EXITED PROCESSES**");
-       displayFrame.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
-        for(OSProcess exitedProcess : exited){
-            displayPanel.add(exitedProcess.getProcessDisplay());
-            System.out.println(exitedProcess.processDisplayToString());
-            System.out.println();
-        }
-       System.out.println("*********END OF DISPLAY METHOD******************");
-       System.out.println();
-        step1butt = new JButton();
-        step1butt.setText("1 Step Forward");
-       displayPanel.add(step1butt);
-
-
-        displayFrame.add(displayPanel);
-        displayFrame.revalidate();
-        displayFrame.repaint();
-
-       displayFrame.setSize(400, 500);
-       displayFrame.setLocationRelativeTo(null);
-        displayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        displayFrame.setVisible(true);
-
-        return displayFrame;
-    }
-
-    //updates the entire OS frame
-    public void updateFrame(){
-        //      this.displayFrame.removeAll();
-//        this.displayFrame.add(this.displayPanel);
-        displayFrame.revalidate();
-        displayFrame.repaint();
-    }
+//     */
+//
+//    static JFrame displayFrame = new JFrame("Group 3 Operating System Simulator");
+//    static JPanel displayPanel = new JPanel();
+//
+//    static JButton step1butt;
+//
+//
+//   static public JFrame getDisplayPanel(){
+//
+////        displayFrame.setTitle("Group 3 Operating System Simulator");
+//       displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
+//
+//       displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
+//       System.out.println("Clock Time: " + OSClock.clock);
+//        System.out.println("**UNENTERED PROCESSES**");
+//       displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
+//        for(OSProcess unenteredProcess : outsideProcesses){
+//            displayPanel.add(unenteredProcess.getProcessDisplay());
+//            System.out.println(unenteredProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//       System.out.println("**NEW PROCESSES**");
+//       displayPanel.add(new JLabel("**NEW PROCESSES**"));
+//        for(OSProcess newProcess : newProcesses){
+//            displayPanel.add(newProcess.getProcessDisplay());
+//            System.out.println(newProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//       System.out.println("**READY QUEUE**");
+//       displayPanel.add(new JLabel("**READY QUEUE**"));
+//        for(OSProcess readyProcess : readyQueue){
+//            displayPanel.add(readyProcess.getProcessDisplay());
+//            System.out.println(readyProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//       System.out.println("**BLOCKED PROCESSES**");
+//       displayFrame.add(new JLabel("**BLOCKED PROCESSES**"));
+//        for(OSProcess blockedProcess : blocked){
+//            displayPanel.add(blockedProcess.getProcessDisplay());
+//            System.out.println(blockedProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//       System.out.println("**RUNNING PROCESS**");
+//       displayFrame.add(new JLabel("**RUNNING PROCESS**"));
+//        for(OSProcess runningProcess : running){
+//            displayPanel.add(runningProcess.getProcessDisplay());
+//            System.out.println(runningProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//       System.out.println("**FINISHED/EXITED PROCESSES**");
+//       displayFrame.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
+//        for(OSProcess exitedProcess : exited){
+//            displayPanel.add(exitedProcess.getProcessDisplay());
+//            System.out.println(exitedProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//       System.out.println("*********END OF DISPLAY METHOD******************");
+//       System.out.println();
+//        step1butt = new JButton();
+//        step1butt.setText("1 Step Forward");
+//       displayPanel.add(step1butt);
+//
+//
+//        displayFrame.add(displayPanel);
+//        displayFrame.revalidate();
+//        displayFrame.repaint();
+//
+//       displayFrame.setSize(400, 500);
+//       displayFrame.setLocationRelativeTo(null);
+//        displayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        displayFrame.setVisible(true);
+//
+//        return displayFrame;
+//    }
+//
+//    //updates the entire OS frame
+//    public void updateFrame(){
+//        //      this.displayFrame.removeAll();
+////        this.displayFrame.add(this.displayPanel);
+//        displayFrame.revalidate();
+//        displayFrame.repaint();
+//    }
 
 
     public static void displayActiveProcess(OperatingSystem systemCurrent){ //takes in current state of operating system
@@ -268,23 +268,38 @@ public class OperatingSystem extends RoundRobin{
         IORequest testIO = new IORequest(25,50);
         testProcess.ioRequests[0] = testIO;
 
+
+        OSProcess testProcess2 = new OSProcess(2, 16,3,100);
+        IORequest testIO2 = new IORequest(25,70);
+        IORequest testIO3 = new IORequest(40, 20);
+        testProcess2.ioRequests[0] = testIO;
+        testProcess2.ioRequests[1]=testIO2;
+        testProcess2.ioRequests[2] = testIO3;
+
         System.out.println("***** added to outside process****");
         outsideProcesses.add(testProcess);
+        outsideProcesses.add(testProcess2);
         getDisplayPanel();
 
 
 
         osRoundRobin.enterProcess();
+        osRoundRobin.enterProcess();
         getDisplayPanel();
         osRoundRobin.newProcessToReady();
         getDisplayPanel();
-        for(int i=0; i<120; i++){
+        for(int i=0; i<500; i++){
             System.out.println(i);
+            if(newProcesses.size()>0) {
+                osRoundRobin.newProcessToReady();
+            }
             osRoundRobin.runOneCycleSetup();
             getDisplayPanel();
             osRoundRobin.runOneCycleRoundRobin();
             getDisplayPanel();
         }
+
+
 
 
 

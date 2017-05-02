@@ -22,7 +22,7 @@ public class IORequest{
     }
 
     //I/O request is run to completion
-    public void runIO(){
+    public void satisfyIO(){
         OSClock.clock += getTIME_NEEDED();    //adds time the I/O needed to overall system clock
         this.complete = true;
     }

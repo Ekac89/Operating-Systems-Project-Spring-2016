@@ -59,6 +59,7 @@ public class OSProcess{
 
         this.PROCESS_SIZE = memorySize;
         this.IO_REQUESTS = ioRequests;
+//        this.populateIORandom(); TODO: I/O requests not created randomly on process creation
         this.CYCLES = cycles;
         this.ARRIVAL_TIME = OSClock.clock;
 
@@ -94,7 +95,7 @@ public class OSProcess{
         if (ioNumber >= 0 && ioNumber <= 5) {
             setState(4); //process is in block state when interrupted, updates display
 
-            ioRequests[ioNumber].runIO(); //run the I/O, updates clock
+            ioRequests[ioNumber].satisfyIO(); //run the I/O, updates clock
             ioRequestsUnsatisfied--;
             ioRequestsSatisfied++;
 
@@ -201,6 +202,18 @@ public class OSProcess{
                 + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
                 + "<br>Current state: " + stateToString()
                 + "</html>");
+    }
+
+    //creates random I/O requests for process
+    public void populateIORandom() {
+        for (int i = 0; i < this.IO_REQUESTS; i++) {
+            //I/O requests can take 25-50 cycles to complete
+            int ioCyclesNeeded = ThreadLocalRandom.current().nextInt(25, 50);
+            //randomly chooses a cycle within the cycles the process has to interrupt
+            int ioCycleLaunch = ThreadLocalRandom.current().nextInt(1, this.CYCLES);  //starts at cycle 1 until start of last cycle
+
+            this.ioRequests[i] = new IORequest(ioCyclesNeeded, ioCycleLaunch);
+        }
     }
 
     //Setters
