@@ -278,10 +278,16 @@ public class OperatingSystem extends RoundRobin{
         getDisplayPanel();
         osRoundRobin.newProcessToReady();
         getDisplayPanel();
-        osRoundRobin.readyQueueToRun();
-        getDisplayPanel();
-        osRoundRobin.runRunningProcess();
-        getDisplayPanel();
+        for(int i=0; i<120; i++){
+            System.out.println(i);
+            osRoundRobin.runOneCycleSetup();
+            getDisplayPanel();
+            osRoundRobin.runOneCycleRoundRobin();
+            getDisplayPanel();
+        }
+
+
+
 
 
 

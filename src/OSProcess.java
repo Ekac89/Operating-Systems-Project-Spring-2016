@@ -11,7 +11,7 @@ public class OSProcess{
 
     //OSProcess Control Block (PCB) *****************************
     int PROCESS_ID; //unique identifier for each process (at most 60 processes) (will simply be order in which entered)
-    int pointerIndex; //array index that represents location in memory
+    int POINTER_INDEX; //array index that represents location in memory
     int state; //number represents process' current state:
                     //1 = new
                     //2 = ready
@@ -109,15 +109,15 @@ public class OSProcess{
     public void runOneCycle(){
         setState(3); //state set to running, also updates process display
 
-        this.cycleCurrent++;
-        this.cyclesLeft--;
+        this.cycleCurrent--;
         this.timeUsed = timeUsed + 0.1;
         this.timeLeft = timeLeft - 0.1;
 
         OSClock.clock += 0.1; //adds one cycle to overall system clock
 
-        if(cyclesLeft == 0){    //TODO: doesn't check if I/O requests done
+        if(cycleCurrent == 0){    //TODO: doesn't check if I/O requests done
             complete = true;
+            this.setState(5); //setting state to exited
         }
 
         updateProcessDisplay(); //updates display after cycle is done
@@ -129,7 +129,8 @@ public class OSProcess{
         this.processDisplay.setText("<html>" +
                 "Process ID: " + this.PROCESS_ID
                 + "<br>Total CPU time needed: " + this.TIME_NEEDED
-                + "<br>CPU time used: " + this.timeLeft
+                + "<br>CPU time left: " + this.timeLeft
+                + "<br>CPU current cycle: " + this.cycleCurrent
                 + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
                 + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
                 + "<br>Current state: " + stateToString()
@@ -212,8 +213,8 @@ public class OSProcess{
         this.PROCESS_ID = PROCESS_ID;
     }
 
-    public void setPointerIndex(int pointerIndex) {
-        this.pointerIndex = pointerIndex;
+    public void setPOINTER_INDEX(int POINTER_INDEX) {
+        this.POINTER_INDEX = POINTER_INDEX;
     }
 
     public void setState(int state) {
@@ -268,9 +269,7 @@ public class OSProcess{
         return PROCESS_ID;
     }
 
-    public int getPointerIndex() {
-        return pointerIndex;
-    }
+    public int getPOINTER_INDEX() {return POINTER_INDEX;}
 
     public int getState() {
         return state;

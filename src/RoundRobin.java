@@ -35,6 +35,12 @@ public class RoundRobin{
 
         OSClock.clock = 0;
     }
+    //checking if it's time to enter a process
+    public OSProcess checkForNewProcess(){
+        for(OSProcess outsideProcess : outsideProcesses){
+
+        }
+    }
 
     //entering in next process
     public void enterProcess(){
@@ -56,13 +62,13 @@ public class RoundRobin{
 //        }
     }
 
-    //moves process from readyQueue to run
-    public void readyQueueToRun(){
-        running.add(readyQueue.remove(0));
-        running.get(0).setState(3); //setting state to running, updates process display
-       // displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
-        runningIOCheck(); //checks if process has an I/O interrupt right out of the gate.
-    }
+//    //moves process from readyQueue to run
+//    public void readyQueueToRun(){
+//        running.add(readyQueue.remove(0));
+//        running.get(0).setState(3); //setting state to running, updates process display
+//       // displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
+//        runningIOCheck(); //checks if process has an I/O interrupt right out of the gate.
+//    }
 
     //checks running process for IO interrupt
     public void runningIOCheck(){
@@ -72,32 +78,63 @@ public class RoundRobin{
             blocked.get(0).runIO(blocked.get(0).checkForIO()); //runs I/O interrupt and changes process state to blocked
                                                                         //also updates process display, clock (when running IO, time passes)
             //displayOS.getDisplayPanel(); //TODO:not sure if this will work/update display correctly
-            running.add(blocked.get(0)); //done with I/O, add back to running
+            running.add(blocked.remove(0)); //done with I/O, add back to running
             running.get(0).setState(3); //setting state to running, updates process display
            // displayOS.updateFrame(); //TODO:not sure if this will work/update display correctly
         }
     }
 
-    //gets only process in running list and runs it
-    public void runRunningProcess(){
-        //run 10 cycles unless process complete
-        for(int c=1; c<=10; c++){
-            //first checks for I/O interrupt
-            runningIOCheck();
-            //then keep running
-            running.get(0).runOneCycle();
-            //checking if process is done after this cycle
-            if(running.get(0).complete == true){
-                exited.add(running.remove(0)); //process exits
-                exited.get(exited.size()).setState(5); //sets this last exited process to state exited, updates display
-               // displayOS.updateFrame();//TODO:not sure if this will work/update display correctly
-                break;
-            }
+//    //gets only process in running list and runs it
+//    public void runRunningProcess(){
+//        //run 10 cycles unless process complete
+//        for(int c=1; c<=10; c++){
+//            //first checks for I/O interrupt
+//            runningIOCheck();
+//            //then keep running
+//            running.get(0).runOneCycle();
+//            //checking if process is done after this cycle
+//            if(running.get(0).complete == true){
+//                exited.add(running.remove(0)); //process exits
+//                exited.get(exited.size()).setState(5); //sets this last exited process to state exited, updates display
+//               // displayOS.updateFrame();//TODO:not sure if this will work/update display correctly
+//                break;
+//            }
+//        }
+//        running.get(0).setState(2); //setting state back to ready
+//        readyQueue.add(running.get(0)); //places process on readyQueue after it's done running
+//    }
+
+    //checks through unentered and new queues; these do not use up clock time
+    public void check
+
+    //checks for state of process before running, MUST be called before runOnecycleRoundRobin
+    public void runOneCycleSetup(){
+        //if nothing is running or blocked, gets next Process from readyQueue
+        if(running.size()==0 && blocked.size()==0){
+            running.add(readyQueue.remove(0));
+            running.get(0).setState(3); //setting state to ready
         }
-        running.get(0).setState(2); //setting state back to ready
-        readyQueue.add(running.get(0)); //places process on readyQueue after it's done running
+        //if process that was blocked last cycle is done
+        else if(running.size()==0 && blocked.size()==1){
+            running.add(blocked.remove(0));
+            running.get(0).setState(3);
+        }
     }
 
+    //runs one cycle
+    public void runOneCycleRoundRobin(){
+        //checks for I/O first, otherwise runs
+        if(running.get(0).checkForIO()>=0) {
+            blocked.add(running.remove(0)); //moving process from run to block
+            blocked.get(0).setState(4); //setting state to blocked
+            blocked.get(0).ioRequests[blocked.get(0).checkForIO()].runIO(); //runs IO if it's time for IO
+        }else{
+            running.get(0).runOneCycle();
+            if (running.get(0).complete){
+                exited.add(running.remove(0)); //removing if process is complete
+            }
+        }
+    }
 
     //does all of the round robining
     public void runRoundRobin(){
