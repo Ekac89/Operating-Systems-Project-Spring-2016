@@ -1,7 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -9,6 +12,9 @@ import java.util.concurrent.ThreadLocalRandom;
  * Overall abstraction for the OS
  */
 public class OperatingSystem extends RoundRobin{
+
+
+
     //no more than 60 processes entered in 5-state model
 //    int processesEntered = 0; //counts incoming processes, should increment for each new process entered in system
 //
@@ -24,6 +30,49 @@ public class OperatingSystem extends RoundRobin{
 
 //    static Display displayOS = new Display();
 //    static JFrame displayFrameOS = new JFrame("Group 3 Operating System Simulator");
+
+
+
+    public static int[][] ReadInProcess(int [][] processes){  // Create Process
+        File file = new File("pullFromMe.txt");
+        int i = 0;
+        try {
+
+            Scanner sc = new Scanner(file);
+
+            while (sc.hasNextLine()) {
+                //String i = sc.nextLine();
+                //System.out.println(i);
+                String[] tokens = sc.nextLine().split(":");
+                String last = tokens[tokens.length - 1];
+                for (int j = 0; j < tokens.length ; j++) {
+                    processes[i][j] = Integer.parseInt(tokens [j]);
+                    //System.out.println(tokens [j]);
+                }
+                i++;
+
+            }
+            sc.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("print lbl");
+        for (i = 0; i < 60; i++) {
+            for (int j = 0; j < 4 ; j++) {
+                System.out.print(processes[i][j]);
+            }
+            System.out.println();
+        }
+
+
+
+        return (processes);
+
+    }
+
+
 
 
 
@@ -106,6 +155,9 @@ public class OperatingSystem extends RoundRobin{
     public static RoundRobin osRoundRobin;
 
     public static void main(String[] args) {
+        //Creating process array
+        int[][] processes = new int[60][60];
+        ReadInProcess(processes);
         /**Setup of OS**/
 //        //setting up OS
 //        outsideProcesses = new ArrayList<>();
