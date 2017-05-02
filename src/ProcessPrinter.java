@@ -108,9 +108,9 @@ public class ProcessPrinter {
         System.out.println("print lbl");
         for (i = 0; i < 60; i++) {
             for (int j = 0; j < 4 ; j++) {
-                //System.out.print(processes[i][j]);
+                System.out.print(processes[i][j]);
             }
-            //System.out.println();
+            System.out.println();
         }
 
 
