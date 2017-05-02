@@ -65,7 +65,7 @@ public class OSProcess{
 
         this.TIME_NEEDED =  cycles * 0.1;   //each cycle is 0.1 seconds
         this.timeLeft = cycles * 0.1;   //initializes amount of timeLeft
-        this.cycleCurrent = cycles;
+        this.cycleCurrent = 1;
 
         this.ioRequestsSatisfied = 0;
         this.ioRequestsUnsatisfied = ioRequests; //all I/O Requests are unsatisfied on process create
@@ -110,13 +110,13 @@ public class OSProcess{
     public void runOneCycle(){
         setState(3); //state set to running, also updates process display
 
-        this.cycleCurrent--;
+        this.cycleCurrent++;
         this.timeUsed = timeUsed + 0.1;
         this.timeLeft = timeLeft - 0.1;
 
         OSClock.clock += 0.1; //adds one cycle to overall system clock
 
-        if(cycleCurrent == 0){    //TODO: doesn't check if I/O requests done
+        if(cycleCurrent == CYCLES){    //TODO: doesn't check if I/O requests done
             complete = true;
             this.setState(5); //setting state to exited
         }
@@ -131,7 +131,7 @@ public class OSProcess{
                 "Process ID: " + this.PROCESS_ID
                 + "<br>Total CPU time needed: " + this.TIME_NEEDED
                 + "<br>CPU time left: " + this.timeLeft
-                + "<br>CPU current cycle: " + this.cycleCurrent
+                + "<br>On cycle " + this.cycleCurrent + " of " + this.CYCLES
                 + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
                 + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
                 + "<br>Current state: " + stateToString()

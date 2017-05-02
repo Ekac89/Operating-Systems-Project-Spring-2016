@@ -1,11 +1,7 @@
-import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -238,68 +234,79 @@ public class OperatingSystem extends RoundRobin{
         //Creating process array
         int[][] processes = new int[60][60];
         ReadInProcess(processes);
-        /**Setup of OS**/
-//        //setting up OS
-//        outsideProcesses = new ArrayList<>();
-//        newProcesses = new ArrayList<>();
-//        readyQueue = new ArrayList<>();
-//        blocked = new ArrayList<>();
-//        exited = new ArrayList<>();
-//        running = new ArrayList<>();
 
-//        OSClock.clock = 0;
-
-//        ALL_PROCESSES = new ArrayList<>();
-//
-//        outsideProcesses = new ArrayList<>();
-//        newProcesses = new ArrayList<>();
-//        readyQueue = new ArrayList<>();
-//        blocked = new ArrayList<>();
-//        exited = new ArrayList<>();
-//        running = new ArrayList<>();
-//
-//        OSClock.clock = 0;
-
+        //setting up OS
         osRoundRobin = new RoundRobin();
         System.out.println("******SET UP EMPTY ROUND ROBIN****");
-       getDisplayPanel();
+        getDisplayPanel();
 
-        OSProcess testProcess = new OSProcess(1, 16,1,100);
-        IORequest testIO = new IORequest(25,50);
-        testProcess.ioRequests[0] = testIO;
-
-
-        OSProcess testProcess2 = new OSProcess(2, 16,3,100);
-        IORequest testIO2 = new IORequest(25,70);
+        //test process 1
+        OSProcess testProcess1 = new OSProcess(1, 16, 1, 100);
+        IORequest testIO = new IORequest(25, 50);
+        testProcess1.ioRequests[0] = testIO;
+        //test process 2
+        OSProcess testProcess2 = new OSProcess(2, 16, 3, 100);
+        IORequest testIO2 = new IORequest(25, 70);
         IORequest testIO3 = new IORequest(40, 20);
         testProcess2.ioRequests[0] = testIO;
-        testProcess2.ioRequests[1]=testIO2;
+        testProcess2.ioRequests[1] = testIO2;
         testProcess2.ioRequests[2] = testIO3;
 
-        System.out.println("***** added to outside process****");
-        outsideProcesses.add(testProcess);
+        /**setting up processes */
+        outsideProcesses.add(testProcess1);
         outsideProcesses.add(testProcess2);
+        ALL_PROCESSES.add(testProcess1);
+        ALL_PROCESSES.add(testProcess2);
+        System.out.println("***** add to outside process****");
         getDisplayPanel();
 
+//        /**Manual Round Robin**/
+//        //osRoundrobin.checkForNewProcess(); //checks if theres memory for new process //TODO: not implemented in RoundRobin.java (commented out)
+//        osRoundRobin.enterProcess(); //enters testProcess1
+//        osRoundRobin.newProcessToReady(); //moves testProcess1 to ready
+//        osRoundRobin.enterProcess(); //enters testProcess2
+//        osRoundRobin.newProcessToReady(); //moves testProcess2 to ready
+//        osRoundRobin.readyQueueToRun(); //moving next ready process to run
+//        osRoundRobin.run10Cycles(); //running the testProcess1, should update display
+//        //running is now empty
+//        osRoundRobin.readyQueueToRun(); //moving testProcess2 to run
+//        osRoundRobin.run10Cycles(); //running testProcess 2
+//        //all processes should have exited
+////        for(int i=0; i<500; i++){
+////            System.out.println(i);
+////            if(newProcesses.size()>0) {
+////                osRoundRobin.newProcessToReady();
+////            }
+////            osRoundRobin.runOneCycleSetup();
+////            getDisplayPanel();
+////            osRoundRobin.runOneCycleRoundRobin();
+////            getDisplayPanel();
+////        }
 
-
-        osRoundRobin.enterProcess();
-        osRoundRobin.enterProcess();
-        getDisplayPanel();
-        osRoundRobin.newProcessToReady();
-        getDisplayPanel();
-        for(int i=0; i<500; i++){
-            System.out.println(i);
-            if(newProcesses.size()>0) {
-                osRoundRobin.newProcessToReady();
-            }
-            osRoundRobin.runOneCycleSetup();
-            getDisplayPanel();
-            osRoundRobin.runOneCycleRoundRobin();
-            getDisplayPanel();
+        /**Automated Round Robin*/
+        //trying out automated round robin algorithm, should go through everything
+        int whileLoopCount =0;
+        while (exited.size() < ALL_PROCESSES.size()){ //while there are processes that haven't been entered
+            System.out.println();
+            System.out.println("While loop count: " + whileLoopCount);
+            System.out.println();
+            //TODO: implement method to check for memory, not just add them in
+//         if(checkForNewProcess()){ //if enough memory
+            /**Fetch*/
+                osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
+                osRoundRobin.newProcessToReady(); //takes new process and puts in ready
+            /**Check*/
+                osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
+            /**Execute*/
+                osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
+                //running now empty, last run process at bottom of ready
+//          }else{ //if not enough memory
+//              osRoundRobin.newProcessToReady(); //if there is a new process, newProcessToReady() will set it to ready
+//              osRoundRobin.readyQueueToRun();
+//              osRoundRobin.run10Cycles();
+//          }
+//
         }
-
-
 
 
 
