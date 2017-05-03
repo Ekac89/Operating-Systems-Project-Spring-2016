@@ -2,13 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d379500-db79-440d-955b-8c51b5c4b685" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Operating-Systems-Project-Spring-2016/OperatingSystem$1.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Operating-Systems-Project-Spring-2016/OperatingSystem$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Operating-Systems-Project-Spring-2016/OSProcess.class" afterPath="$PROJECT_DIR$/out/production/Operating-Systems-Project-Spring-2016/OSProcess.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Operating-Systems-Project-Spring-2016/OperatingSystem.class" afterPath="$PROJECT_DIR$/out/production/Operating-Systems-Project-Spring-2016/OperatingSystem.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Operating-Systems-Project-Spring-2016/RoundRobin.class" afterPath="$PROJECT_DIR$/out/production/Operating-Systems-Project-Spring-2016/RoundRobin.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/OperatingSystem.java" afterPath="$PROJECT_DIR$/src/OperatingSystem.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/RoundRobin.java" afterPath="$PROJECT_DIR$/src/RoundRobin.java" />
     </list>
     <ignored path="group3os.iws" />
@@ -36,8 +29,8 @@
             <file leaf-file-name="OperatingSystem.java" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/src/OperatingSystem.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="531">
-                    <caret line="350" column="30" lean-forward="true" selection-start-line="350" selection-start-column="30" selection-end-line="350" selection-end-column="30" />
+                  <state relative-caret-position="740">
+                    <caret line="361" column="31" lean-forward="false" selection-start-line="361" selection-start-column="31" selection-end-line="361" selection-end-column="31" />
                     <folding>
                       <element signature="imports" expanded="true" />
                     </folding>
@@ -107,8 +100,8 @@
       <file leaf-file-name="RoundRobin.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/RoundRobin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="823">
-              <caret line="231" column="39" lean-forward="true" selection-start-line="231" selection-start-column="39" selection-end-line="231" selection-end-column="39" />
+            <state relative-caret-position="329">
+              <caret line="224" column="8" lean-forward="false" selection-start-line="224" selection-start-column="8" selection-end-line="224" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1169#1180#0" expanded="true" />
@@ -903,23 +896,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/RoundRobin.java">
+    <entry file="file://$PROJECT_DIR$/src/OperatingSystem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="823">
-          <caret line="231" column="39" lean-forward="true" selection-start-line="231" selection-start-column="39" selection-end-line="231" selection-end-column="39" />
+        <state relative-caret-position="740">
+          <caret line="361" column="31" lean-forward="false" selection-start-line="361" selection-start-column="31" selection-end-line="361" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1169#1180#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/OperatingSystem.java">
+    <entry file="file://$PROJECT_DIR$/src/RoundRobin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="350" column="30" lean-forward="true" selection-start-line="350" selection-start-column="30" selection-end-line="350" selection-end-column="30" />
+        <state relative-caret-position="329">
+          <caret line="224" column="8" lean-forward="false" selection-start-line="224" selection-start-column="8" selection-end-line="224" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1169#1180#0" expanded="true" />
           </folding>
         </state>
       </provider>
