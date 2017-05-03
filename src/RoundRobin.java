@@ -1,10 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -187,11 +183,7 @@ public class RoundRobin {
             }
         } //process ran for 10 cycles + I/O ran
         //now bring in any unentered processes
-//      if(this.checkForMemory()){
-//          this.enterProcess; //if enough room enter process   //TODO: method not implemented
-//          getDisplayPanel();
-//      }
-//
+        //also checks Memory
         this.newProcessToReady(); //makes sure to bring in new processes after this one is done running
         getDisplayPanel();
         //now we can place process that just finished running to the bottom of ready
@@ -286,10 +278,5 @@ public class RoundRobin {
         container.add(displayScroll);
 
         return displayFrame;
-    }
-
-    //button stuff
-    public void buttonPress(){
-
     }
 }
