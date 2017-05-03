@@ -1,8 +1,8 @@
     import java.io.FileWriter;
         import java.util.Random;
         import java.io.IOException;
-    /**import java.io.BufferedReader;
-     * Created by Chris on 4/26/2017.
+    /**
+     * Creates and allocates physical memory
      */
     public class Memory {
 

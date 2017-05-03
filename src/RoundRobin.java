@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
 /**
- * MAY DELETE THIS CLASS
+ * Houses Round Robin algorithm methods and display
  */
 public class RoundRobin {
 
@@ -47,7 +47,7 @@ public class RoundRobin {
         OSClock.clock = 0;
     }
 
-    //TODO: set up check to see if there's memory enough for a new process, THEN call enterProcess()
+
     //checking if there's room for a new process; returns true if room AND if no next outside process
     public static boolean checkForMemory(){
         //if there are any more outsideProcesses
@@ -105,11 +105,7 @@ public class RoundRobin {
     public static int[] PrintProcessFromMem(int[] memory) {
 
         for (int c = 0; c <= 15; ++c) {
-            System.out.print(memory[c] + " | ");
         }
-
-        System.out.println();
-
         return (memory);
     }
 
@@ -138,7 +134,7 @@ public class RoundRobin {
                 readyQueue.add(newProcesses.remove(0)); //removing from new and adding to ready queue
                 readyQueue.get(readyQueue.size() - 1).setState(2); //setting newly added ready to ready
                 hit = 0 ;
-                getDisplayPanel(); //TODO:not sure if this will work/update display correctly
+                getDisplayPanel();
                 return true; //new process was found
             }
             return false;
@@ -153,7 +149,7 @@ public class RoundRobin {
         if(readyQueue.size()>0) {
             running.add(readyQueue.remove(0)); //removing from ready and adding to run
             running.get(0).setState(3); //setting state to running, updates process display
-            getDisplayPanel(); //TODO:not sure if this will work/update display correctly
+            getDisplayPanel();
             return true; //process ran
         }else{ //if no processes in readyQueue
             return false;
@@ -167,11 +163,11 @@ public class RoundRobin {
             blocked.add(running.remove(0)); //removes current process and places it in blocked queue
             blocked.get(0).runIO(blocked.get(0).checkForIO()); //runs I/O interrupt and changes process state to blocked
                                                                 //also updates process display, clock (when running IO, time passes)
-            getDisplayPanel();//TODO:not sure if this will work/update display correctly
+            getDisplayPanel();
             //I/O request done, so add back to running
             running.add(blocked.remove(0)); //done with I/O, add back to running
             running.get(0).setState(3); //setting state to running, updates process display
-            getDisplayPanel();//TODO:not sure if this will work/update display correctly
+            getDisplayPanel();
         }
     }
 
@@ -179,6 +175,11 @@ public class RoundRobin {
     public void run10Cycles(){
         //run 10 cycles unless process complete
         getDisplayPanel();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
         for(int c=1; c<=10; c++){
             //first checks for I/O interrupt
 
@@ -194,7 +195,7 @@ public class RoundRobin {
                 RemoveProcessFromMem(running.get(0).PROCESS_ID, memory);
                 exited.add(running.remove(0)); //process exits
                 exited.get(exited.size()-1).setState(5); //sets this last exited process to state exited, updates display
-                getDisplayPanel();//TODO:not sure if this will work/update display correctly
+                getDisplayPanel();
                 break;
             }
         } //process ran for 10 cycles + I/O ran
@@ -210,7 +211,7 @@ public class RoundRobin {
             readyQueue.get(readyQueue.size() - 1).setState(2); //setting state back to ready
             getDisplayPanel();
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
@@ -218,7 +219,7 @@ public class RoundRobin {
     }
 
 
-    /**Display for OS*/
+    /**Display for OS**/
 
     static JFrame displayFrame = new JFrame("Group 3 Operating System Simulator");
     static JPanel displayPanel = new JPanel();
@@ -249,71 +250,48 @@ public class RoundRobin {
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
 
         displayPanel.add(new JLabel(Arrays.toString(memory)));
-       // System.out.println(Arrays.toString(memory));
+
         displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
-        System.out.println("Clock Time: " + OSClock.clock);
-       // System.out.println("**UNENTERED PROCESSES**");
-//        displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
-//        for(OSProcess unenteredProcess : outsideProcesses){
-//            displayPanel.add(unenteredProcess.getProcessDisplay());
-//           // System.out.println(unenteredProcess.processDisplayToString());
-//            //System.out.println();
-//        }
-        System.out.println("**NEW PROCESSES**");
+
         JLabel newPLabel = new JLabel("**NEW PROCESSES**");
         newPLabel.setFont(newPLabel.getFont().deriveFont(15));
         newPLabel.setForeground(Color.BLUE);
         displayPanel.add(newPLabel);
         for(OSProcess newProcess : newProcesses){
             displayPanel.add(newProcess.getProcessDisplay());
-            System.out.println(newProcess.processDisplayToString());
-            System.out.println();
         }
-        //System.out.println("**READY QUEUE**");
+
         JLabel readyLabel = new JLabel("**READY QUEUE**");
         readyLabel.setFont(readyLabel.getFont().deriveFont(15));
         readyLabel.setForeground(Color.BLUE);
         displayPanel.add(readyLabel);
         for(OSProcess readyProcess : readyQueue){
             displayPanel.add(readyProcess.getProcessDisplay());
-           // System.out.println(readyProcess.processDisplayToString());
-           // System.out.println();
         }
-        //System.out.println("**BLOCKED PROCESSES**");
+
         JLabel blockedLabel = new JLabel("**BLOCKED PROCESSES**");
         blockedLabel.setFont(blockedLabel.getFont().deriveFont(15));
         blockedLabel.setForeground(Color.BLUE);
         displayPanel.add(blockedLabel);
         for(OSProcess blockedProcess : blocked){
             displayPanel.add(blockedProcess.getProcessDisplay());
-           // System.out.println(blockedProcess.processDisplayToString());
-           // System.out.println();
         }
-      System.out.println("**RUNNING PROCESS**");
+
         JLabel runningLabel = new JLabel("**RUNNING PROCESS**");
         runningLabel.setFont(runningLabel.getFont().deriveFont(15));
         runningLabel.setForeground(Color.BLUE);
         displayPanel.add(runningLabel);
         for(OSProcess runningProcess : running){
             displayPanel.add(runningProcess.getProcessDisplay());
-           System.out.println(runningProcess.processDisplayToString());
-         //   System.out.println();
         }
-        //System.out.println("**FINISHED/EXITED PROCESSES**");
+
         JLabel exitedLabel = new JLabel("**FINISHED/EXITED PROCESSES**");
         exitedLabel.setFont(exitedLabel.getFont().deriveFont(15));
         exitedLabel.setForeground(Color.BLUE);
         displayPanel.add(exitedLabel);
         for(OSProcess exitedProcess : exited){
             displayPanel.add(exitedProcess.getProcessDisplay());
-           // System.out.println(exitedProcess.processDisplayToString());
-            //System.out.println();
-        }        displayPanel.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
-
-
-
-        System.out.println("*********END OF DISPLAY METHOD******************");
-        System.out.println();
+        }
 
         displayFrame.add(displayPanel);
 
@@ -321,11 +299,6 @@ public class RoundRobin {
         displayFrame.setLocationRelativeTo(null);
         displayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         displayFrame.setVisible(true);
-
-
-//        Container container = displayFrame.getContentPane();
-//        JScrollPane displayScroll = new JScrollPane(displayPanel);
-//        container.add(displayScroll);
 
         return displayFrame;
     }

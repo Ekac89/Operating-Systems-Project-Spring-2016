@@ -3,7 +3,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
- *
+ * Represents a single process; includes I/O information through associated I/O objects
  *
  */
 public class OSProcess{
