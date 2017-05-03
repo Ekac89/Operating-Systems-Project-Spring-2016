@@ -43,23 +43,19 @@ public class RoundRobin {
     public static boolean checkForMemory(){
         //if there are any more outsideProcesses
 
-      if(outsideProcesses.size()>0) {
+      if(newProcesses.size()>0) {
 
-          AddProcessFromMem(outsideProcesses.get(0).PROCESS_SIZE, memory, outsideProcesses.get(0).PROCESS_ID);
+          AddProcessFromMem(newProcesses.get(0).PROCESS_SIZE, memory, newProcesses.get(0).PROCESS_ID);
 
           PrintProcessFromMem(memory);
           if (hit == 1) { //TODO: check for memory
-              hit = 0;
-              PrintProcessFromMem(memory);
+              //hit = 0;
               return true; //found a new process
           }else{
-              PrintProcessFromMem(memory);
               //don't enter in process because not enough memor
               return false; //no new process
           }
       }else{
-
-          PrintProcessFromMem(memory);
           return true; //returns true if no processes
       }
 
@@ -72,7 +68,7 @@ public class RoundRobin {
                     MemCount++;
                     if (MemCount == Size) {
                         for (int i = 0; i < MemCount; i++) {
-                            hit = 1; // found room in mem
+                           hit = 1; // found room in mem
                             memory[c - i] = id;
                         }
                         c = 17;
@@ -101,7 +97,7 @@ public class RoundRobin {
 
         for (int c = 0; c <= 15; ++c) {
 
-            System.out.println(memory[c] + " | ");
+            System.out.print(memory[c] + " | ");
         }
 
         System.out.println();
@@ -126,12 +122,17 @@ public class RoundRobin {
     //gets oldest new Process (top of newQueue) and adds to ready; Does not increment clock
     // returns false if no new processes, true if new process was moved to ready
     public boolean newProcessToReady(){
-        if(newProcesses.size()>0) {
-            readyQueue.add(newProcesses.remove(0)); //removing from new and adding to ready queue
-            readyQueue.get(readyQueue.size() - 1).setState(2); //setting newly added ready to ready
 
-            getDisplayPanel(); //TODO:not sure if this will work/update display correctly
-            return true; //new process was found
+        if(newProcesses.size()>0) {
+            RoundRobin.checkForMemory();
+            if (hit == 1) {
+                readyQueue.add(newProcesses.remove(0)); //removing from new and adding to ready queue
+                readyQueue.get(readyQueue.size() - 1).setState(2); //setting newly added ready to ready
+                hit = 0 ;
+                getDisplayPanel(); //TODO:not sure if this will work/update display correctly
+                return true; //new process was found
+            }
+            return false;
         }else{ //no new processes found
             //doesn't update display
             return false;
@@ -175,6 +176,7 @@ public class RoundRobin {
             running.get(0).runOneCycle();
             //checking if process is done after this cycle
             if(running.get(0).complete == true){
+                RemoveProcessFromMem(running.get(0).PROCESS_ID, memory);
                 exited.add(running.remove(0)); //process exits
                 exited.get(exited.size()-1).setState(5); //sets this last exited process to state exited, updates display
                 getDisplayPanel();//TODO:not sure if this will work/update display correctly
@@ -209,63 +211,63 @@ public class RoundRobin {
 
     static public JFrame getDisplayPanel(){
 
-//        displayFrame.setTitle("Group 3 Operating System Simulator");
+        displayFrame.setTitle("Group 3 Operating System Simulator");
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
 
-        displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
-        System.out.println("Clock Time: " + OSClock.clock);
-        System.out.println("**UNENTERED PROCESSES**");
-        displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
-        for(OSProcess unenteredProcess : outsideProcesses){
-            displayPanel.add(unenteredProcess.getProcessDisplay());
-            System.out.println(unenteredProcess.processDisplayToString());
-            System.out.println();
-        }
-        System.out.println("**NEW PROCESSES**");
-        displayPanel.add(new JLabel("**NEW PROCESSES**"));
-        for(OSProcess newProcess : newProcesses){
-            displayPanel.add(newProcess.getProcessDisplay());
-            System.out.println(newProcess.processDisplayToString());
-            System.out.println();
-        }
-        System.out.println("**READY QUEUE**");
-        displayPanel.add(new JLabel("**READY QUEUE**"));
-        for(OSProcess readyProcess : readyQueue){
-            displayPanel.add(readyProcess.getProcessDisplay());
-            System.out.println(readyProcess.processDisplayToString());
-            System.out.println();
-        }
-        System.out.println("**BLOCKED PROCESSES**");
-        displayFrame.add(new JLabel("**BLOCKED PROCESSES**"));
-        for(OSProcess blockedProcess : blocked){
-            displayPanel.add(blockedProcess.getProcessDisplay());
-            System.out.println(blockedProcess.processDisplayToString());
-            System.out.println();
-        }
-        System.out.println("**RUNNING PROCESS**");
-        displayFrame.add(new JLabel("**RUNNING PROCESS**"));
-        for(OSProcess runningProcess : running){
-            displayPanel.add(runningProcess.getProcessDisplay());
-            System.out.println(runningProcess.processDisplayToString());
-            System.out.println();
-        }
-        System.out.println("**FINISHED/EXITED PROCESSES**");
-        displayFrame.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
-        for(OSProcess exitedProcess : exited){
-            displayPanel.add(exitedProcess.getProcessDisplay());
-            System.out.println(exitedProcess.processDisplayToString());
-            System.out.println();
-        }
-        System.out.println("*********END OF DISPLAY METHOD******************");
-        System.out.println();
-        step1butt = new JButton();
-        step1butt.setText("1 Step Forward");
-        displayPanel.add(step1butt);
-
-
-        displayFrame.add(displayPanel);
-        displayFrame.revalidate();
-        displayFrame.repaint();
+//        displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
+//        System.out.println("Clock Time: " + OSClock.clock);
+//        System.out.println("**UNENTERED PROCESSES**");
+//        displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
+//        for(OSProcess unenteredProcess : outsideProcesses){
+//            displayPanel.add(unenteredProcess.getProcessDisplay());
+//            System.out.println(unenteredProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//        System.out.println("**NEW PROCESSES**");
+//        displayPanel.add(new JLabel("**NEW PROCESSES**"));
+//        for(OSProcess newProcess : newProcesses){
+//            displayPanel.add(newProcess.getProcessDisplay());
+//            System.out.println(newProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//        System.out.println("**READY QUEUE**");
+//        displayPanel.add(new JLabel("**READY QUEUE**"));
+//        for(OSProcess readyProcess : readyQueue){
+//            displayPanel.add(readyProcess.getProcessDisplay());
+//            System.out.println(readyProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//        System.out.println("**BLOCKED PROCESSES**");
+//        displayFrame.add(new JLabel("**BLOCKED PROCESSES**"));
+//        for(OSProcess blockedProcess : blocked){
+//            displayPanel.add(blockedProcess.getProcessDisplay());
+//            System.out.println(blockedProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//        System.out.println("**RUNNING PROCESS**");
+//        displayFrame.add(new JLabel("**RUNNING PROCESS**"));
+//        for(OSProcess runningProcess : running){
+//            displayPanel.add(runningProcess.getProcessDisplay());
+//            System.out.println(runningProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//        System.out.println("**FINISHED/EXITED PROCESSES**");
+//        displayFrame.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
+//        for(OSProcess exitedProcess : exited){
+//            displayPanel.add(exitedProcess.getProcessDisplay());
+//            System.out.println(exitedProcess.processDisplayToString());
+//            System.out.println();
+//        }
+//        System.out.println("*********END OF DISPLAY METHOD******************");
+//        System.out.println();
+//        step1butt = new JButton();
+//        step1butt.setText("1 Step Forward");
+//        displayPanel.add(step1butt);
+//
+//
+//        displayFrame.add(displayPanel);
+//        displayFrame.revalidate();
+//        displayFrame.repaint();
 
         displayFrame.setSize(400, 500);
         displayFrame.setLocationRelativeTo(null);
