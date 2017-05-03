@@ -198,55 +198,6 @@ public class RoundRobin {
         }
     }
 
-    //sets up RR
-    public void setUpNextRun(){
-        if(running.size()==0){
-            running.add(readyQueue.remove(0));
-            running.get(0).setState(3); //setting state to ready
-            getDisplayPanel();
-        }
-    }
-
-    //checks through unentered and new queues; these do not use up clock time
-//    public void check
-
-    //checks for state of process before running, MUST be called before runOnecycleRoundRobin
-    public void runOneCycleSetup(){
-        //if nothing is running or blocked, gets next Process from readyQueue
-        if(running.size()==0 && blocked.size()==0){
-            running.add(readyQueue.remove(0));
-            running.get(0).setState(3); //setting state to ready
-            getDisplayPanel();
-        }
-        //if process was blocked last cycle
-        else if(running.size()==0 && blocked.size()==1){
-            running.add(blocked.remove(0));
-            running.get(0).setState(3);
-            getDisplayPanel();
-        }
-    }
-
-    //runs one cycle
-    public void runOneCycleRoundRobin(){
-        //checks for I/O first, otherwise runs
-        if(running.get(0).checkForIO()>=0) {
-            blocked.add(running.remove(0)); //moving process from run to block
-            blocked.get(0).setState(4); //setting state to blocked
-            blocked.get(0).runIO(blocked.get(0).checkForIO()); //runs IO if it's time for IO
-            getDisplayPanel();
-        }else{
-            running.get(0).runOneCycle();
-            if (running.get(0).complete){
-                exited.add(running.remove(0)); //removing if process is complete
-                getDisplayPanel();
-            }
-        }
-    }
-
-    //does all of the round robining
-    public void runRoundRobin(){
-
-    }
 
     /**Display for OS*/
 

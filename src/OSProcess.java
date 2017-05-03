@@ -26,7 +26,6 @@ public class OSProcess{
     int ioRequestsUnsatisfied; //number of I/O requests left
     Integer[] cyclesForIOs; //CYCLES needed for each io request
                             // this assumes number of CYCLES needed for each IO request is known on process create
-    Integer[] startCycleTimeIO; //when, by cycle, each IO will start on
     //**********************************************************
     //Display -- this information needs to be displayed for each process
     JLabel processDisplay = new JLabel();
@@ -45,7 +44,6 @@ public class OSProcess{
                         //each cycle is 0.1 seconds, so 10 CYCLES per timeslice/timeQuantum in RoundRobin
 
     int cycleCurrent; //current cycle that this process is on (has completed cycleCurrent-1 cycles)
-    int cyclesLeft;
 
     boolean complete;
 
@@ -261,11 +259,6 @@ public class OSProcess{
         this.ioRequestsUnsatisfied = ioRequestsUnsatisfied;
     }
 
-    //not needed in our Round Robin (priority is first come first serve)
-//    public void setPriority(int priority) {
-//        this.priority = priority;
-//    }
-
     public void setARRIVAL_TIME(int arrival_time){this.ARRIVAL_TIME = arrival_time;}
 
     public void setCycleCurrent(int cycleCurrent){this.cycleCurrent = cycleCurrent;}
@@ -315,11 +308,6 @@ public class OSProcess{
     public int getIoRequestsUnsatisfied() {
         return ioRequestsUnsatisfied;
     }
-
-    //not needed in our Round Robin (priority is first come first serve)
-//    public int getPriority() {
-//        return priority;
-//    }
 
     public double getARRIVAL_TIME(){return ARRIVAL_TIME;}
 

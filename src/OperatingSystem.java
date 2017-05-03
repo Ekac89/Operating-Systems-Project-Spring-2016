@@ -257,17 +257,17 @@ public class OperatingSystem extends RoundRobin{
         testProcess2.ioRequests[2] = testIO3;
         testProcess2.ioRequests[3] = testIO4;
         testProcess2.ioRequests[4] = testIO5;
-
-        for(int i = 0; i < 60; i++) {
-            OSProcess testProcess = new OSProcess(processes[i][0], processes[i][1],processes[i][3],processes[i][2]);
-            IORequest testIO5 = new IORequest(25,50);
-            testProcess.ioRequests[0] = testIO;
-
-
-            System.out.println("***** added to outside process****");
-            outsideProcesses.add(testProcess);
-        }
-        RoundRobin.checkForMemory();
+//
+//        for(int i = 0; i < 60; i++) {
+//            OSProcess testProcess = new OSProcess(processes[i][0], processes[i][1],processes[i][3],processes[i][2]);
+//            IORequest testIO5 = new IORequest(25,50);
+//            testProcess.ioRequests[0] = testIO;
+//
+//
+//            System.out.println("***** added to outside process****");
+//            outsideProcesses.add(testProcess);
+//        }
+//        RoundRobin.checkForMemory();
         /**setting up processes */
         outsideProcesses.add(testProcess1);
         outsideProcesses.add(testProcess2);
@@ -276,28 +276,7 @@ public class OperatingSystem extends RoundRobin{
         System.out.println("***** add to outside process****");
         getDisplayPanel();
 
-//        /**Manual Round Robin**/
-//        //osRoundRobin.checkForNewProcess(); //checks if theres memory for new process //TODO: not implemented in RoundRobin.java (commented out)
-//        osRoundRobin.enterProcess(); //enters testProcess1
-//        osRoundRobin.newProcessToReady(); //moves testProcess1 to ready
-//        osRoundRobin.enterProcess(); //enters testProcess2
-//        osRoundRobin.newProcessToReady(); //moves testProcess2 to ready
-//        osRoundRobin.readyQueueToRun(); //moving next ready process to run
-//        osRoundRobin.run10Cycles(); //running the testProcess1, should update display
-//        //running is now empty
-//        osRoundRobin.readyQueueToRun(); //moving testProcess2 to run
-//        osRoundRobin.run10Cycles(); //running testProcess 2
-//        //all processes should have exited
-////        for(int i=0; i<500; i++){
-////            System.out.println(i);
-////            if(newProcesses.size()>0) {
-////                osRoundRobin.newProcessToReady();
-////            }
-////            osRoundRobin.runOneCycleSetup();
-////            getDisplayPanel();
-////            osRoundRobin.runOneCycleRoundRobin();
-////            getDisplayPanel();
-////        }
+
 
         /**Automated Round Robin*/
         //trying out automated round robin algorithm, should go through everything
@@ -325,92 +304,6 @@ public class OperatingSystem extends RoundRobin{
         }
 
 
-
-
-
-
-//        //setting up OS Display
-//        JFrame displayFrameOS = new JFrame("Group 3 Operating System Simulator");
-
-//        Display displayOS = new Display();
-
-//        displayFrameOS.setSize(400, 500);
-//        displayFrameOS.setLocationRelativeTo(null);
-//        displayFrameOS.add(displayOS.getDisplayPanel());
-//        displayFrameOS.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        displayFrameOS.setVisible(true);
-
-
-        //if step forward once button is pressed
-//        if(displayOS.step1butt.getModel().isPressed()){
-//
-//        }
-
-
-
-
-
-
-
-
-
-//        //making 4 random processes, each has arrival time of 1, 2, 3, 4
-//        for(int p=0; p<4; p++){
-//            //process size can be 1-8
-//            int memorySize = ThreadLocalRandom.current().nextInt(1, 8);
-//            //process can have 0 to 5 I/O requests
-//            int ioRequests = ThreadLocalRandom.current().nextInt(1,5);
-//            //process takes between 10-950 CYCLES to complete
-//            int cycles = ThreadLocalRandom.current().nextInt(10,950);
-//            //process' arrival time will be its creation
-//            OSProcess randomProcess = new OSProcess(memorySize,ioRequests,cycles,p,p);
-//
-//            //making the I/O requests that will interrupt it
-//            for(int i=0; i<ioRequests; i++){
-//                //I/O requests can take 25-50 cycles to complete
-//                int ioCyclesNeeded = ThreadLocalRandom.current().nextInt(25,50);
-//                //randomly chooses a cycle within the cycles the process has to interrupt
-//                int ioCycleLaunch = ThreadLocalRandom.current().nextInt(1,cycles);  //starts at cycle 1 until start of last cycle
-//
-//                randomProcess.ioRequests[i] = new IORequest(ioCyclesNeeded,ioCycleLaunch);
-//            }
-//
-//            randomProcess.setPriority(p); //priority is simply the numerical order (1,2,3,4)
-//
-//            outsideProcesses.add(randomProcess); //not entered into OS yet
-//        }
-
-
-
-//        /** Display to make process */
-//        JFrame displayFrameOS = new JFrame("Group 3 Operating System Simulator");
-//
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));  //layout
-//
-//        // JLabel label = new JLabel("label");
-//
-//        JButton button = new JButton();
-//        button.setText("worthless button that will eventually make button");
-//
-//        panel.add(new JLabel("OSProcess Size: "));
-//        panel.add(new JTextField(2));
-//        panel.add(new JLabel("Time needed for process: "));
-//        panel.add(new JTextField(2));
-//        panel.add(new JLabel("I/O Requests Needed: "));
-//        panel.add(new JTextField(2));
-//        panel.add(new JLabel("OSProcess Size: "));
-//        panel.add(new JTextField(2));
-//
-//
-//        panel.add(button);
-//
-//
-//        displayFrameOS.add(panel);
-//        displayFrameOS.setSize(400, 500);
-//        displayFrameOS.setLocationRelativeTo(null);
-//        displayFrameOS.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        displayFrameOS.setVisible(true);
     }
 
 
