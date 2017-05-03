@@ -1,5 +1,7 @@
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -278,31 +280,94 @@ public class OperatingSystem extends RoundRobin{
 
 
 
-        /**Automated Round Robin*/
-        //trying out automated round robin algorithm, should go through everything
-        int whileLoopCount =0;
-        while (exited.size() < ALL_PROCESSES.size()){ //while there are processes that haven't been entered
-            System.out.println();
-            System.out.println("While loop count: " + whileLoopCount);
-            System.out.println();
-            //TODO: implement method to check for memory, not just add them in
+//        /**Automated Round Robin*/
+//        //trying out automated round robin algorithm, should go through everything
+//        int whileLoopCount =0;
+//        while (exited.size() < ALL_PROCESSES.size()){ //while there are processes that haven't been entered
+//            System.out.println();
+//            System.out.println("While loop count: " + whileLoopCount);
+//            System.out.println();
+//            //TODO: implement method to check for memory, not just add them in
+////         if(checkForNewProcess()){ //if enough memory
+//            /**Fetch*/
+//                osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
+//                osRoundRobin.newProcessToReady(); //takes new process and puts in ready
+//            /**Check*/
+//                osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
+//            /**Execute*/
+//                osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
+//                //running now empty, last run process at bottom of ready
+////          }else{ //if not enough memory
+////              osRoundRobin.newProcessToReady(); //if there is a new process, newProcessToReady() will set it to ready
+////              osRoundRobin.readyQueueToRun();
+////              osRoundRobin.run10Cycles();
+////          }
+////
+//        }//end auto round robin
+
+        buttonUntilDone.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(buttonUntilDone.isSelected()){
+                    /**Automated Round Robin*/
+                    //trying out automated round robin algorithm, should go through everything
+                    int whileLoopCount =0;
+                    while (exited.size() < ALL_PROCESSES.size()){ //while there are processes that haven't been entered
+                        System.out.println();
+                        System.out.println("While loop count: " + whileLoopCount);
+                        System.out.println();
+                        //TODO: implement method to check for memory, not just add them in
 //         if(checkForNewProcess()){ //if enough memory
-            /**Fetch*/
-                osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
-                osRoundRobin.newProcessToReady(); //takes new process and puts in ready
-            /**Check*/
-                osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
-            /**Execute*/
-                osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
-                //running now empty, last run process at bottom of ready
+                        /**Fetch*/
+                        osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
+                        osRoundRobin.newProcessToReady(); //takes new process and puts in ready
+                        /**Check*/
+                        osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
+                        /**Execute*/
+                        osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
+                        //running now empty, last run process at bottom of ready
 //          }else{ //if not enough memory
 //              osRoundRobin.newProcessToReady(); //if there is a new process, newProcessToReady() will set it to ready
 //              osRoundRobin.readyQueueToRun();
 //              osRoundRobin.run10Cycles();
 //          }
 //
-        }
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }//end auto round robin
+                }
+            }
+        });
 
+        buttonStep1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(buttonStep1.isEnabled()){
+                    if (exited.size() < ALL_PROCESSES.size()){ //while there are processes that haven't been entered
+
+                        //TODO: implement method to check for memory, not just add them in
+//         if(checkForNewProcess()){ //if enough memory
+                        /**Fetch*/
+                        osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
+                        osRoundRobin.newProcessToReady(); //takes new process and puts in ready
+                        /**Check*/
+                        osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
+                        /**Execute*/
+                        osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
+                        //running now empty, last run process at bottom of ready
+//          }else{ //if not enough memory
+//              osRoundRobin.newProcessToReady(); //if there is a new process, newProcessToReady() will set it to ready
+//              osRoundRobin.readyQueueToRun();
+//              osRoundRobin.run10Cycles();
+//          }
+//
+                    }
+                }
+            }
+        });
 
     }
 

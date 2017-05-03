@@ -1,4 +1,7 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -204,12 +207,20 @@ public class RoundRobin {
     static JFrame displayFrame = new JFrame("Group 3 Operating System Simulator");
     static JPanel displayPanel = new JPanel();
 
-    static JButton step1butt;
+    static JButton buttonUntilDone = new JButton();
+    static JButton buttonStep1 = new JButton();
 
 
     static public JFrame getDisplayPanel(){
+        displayPanel.removeAll();
+        displayPanel.revalidate();
+        displayPanel.repaint();
 
-//        displayFrame.setTitle("Group 3 Operating System Simulator");
+        buttonUntilDone.setText("Run Until Full Stop");
+        displayPanel.add(buttonUntilDone);
+        buttonStep1.setText("Step Forward Once");
+        displayPanel.add(buttonStep1);
+
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
 
         displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
@@ -236,21 +247,21 @@ public class RoundRobin {
             System.out.println();
         }
         System.out.println("**BLOCKED PROCESSES**");
-        displayFrame.add(new JLabel("**BLOCKED PROCESSES**"));
+        displayPanel.add(new JLabel("**BLOCKED PROCESSES**"));
         for(OSProcess blockedProcess : blocked){
             displayPanel.add(blockedProcess.getProcessDisplay());
             System.out.println(blockedProcess.processDisplayToString());
             System.out.println();
         }
         System.out.println("**RUNNING PROCESS**");
-        displayFrame.add(new JLabel("**RUNNING PROCESS**"));
+        displayPanel.add(new JLabel("**RUNNING PROCESS**"));
         for(OSProcess runningProcess : running){
             displayPanel.add(runningProcess.getProcessDisplay());
             System.out.println(runningProcess.processDisplayToString());
             System.out.println();
         }
         System.out.println("**FINISHED/EXITED PROCESSES**");
-        displayFrame.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
+        displayPanel.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
         for(OSProcess exitedProcess : exited){
             displayPanel.add(exitedProcess.getProcessDisplay());
             System.out.println(exitedProcess.processDisplayToString());
@@ -258,29 +269,24 @@ public class RoundRobin {
         }
         System.out.println("*********END OF DISPLAY METHOD******************");
         System.out.println();
-        step1butt = new JButton();
-        step1butt.setText("1 Step Forward");
-        displayPanel.add(step1butt);
-
 
         displayFrame.add(displayPanel);
-        displayFrame.revalidate();
-        displayFrame.repaint();
 
-        displayFrame.setSize(400, 500);
+        displayFrame.setSize(500, 1000);
         displayFrame.setLocationRelativeTo(null);
         displayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         displayFrame.setVisible(true);
 
+
+        Container container = displayFrame.getContentPane();
+        JScrollPane displayScroll = new JScrollPane(displayPanel);
+        container.add(displayScroll);
+
         return displayFrame;
     }
 
-    //updates the entire OS frame
-    public void updateFrame(){
-        //      this.displayFrame.removeAll();
-//        this.displayFrame.add(this.displayPanel);
-        displayFrame.revalidate();
-        displayFrame.repaint();
-    }
+    //button stuff
+    public void buttonPress(){
 
+    }
 }
