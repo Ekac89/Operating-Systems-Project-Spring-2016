@@ -46,23 +46,19 @@ public class RoundRobin {
     public static boolean checkForMemory(){
         //if there are any more outsideProcesses
 
-      if(outsideProcesses.size()>0) {
+      if(newProcesses.size()>0) {
 
-          AddProcessFromMem(outsideProcesses.get(0).PROCESS_SIZE, memory, outsideProcesses.get(0).PROCESS_ID);
+          AddProcessFromMem(newProcesses.get(0).PROCESS_SIZE, memory, newProcesses.get(0).PROCESS_ID);
 
           PrintProcessFromMem(memory);
           if (hit == 1) { //TODO: check for memory
-              hit = 0;
-              PrintProcessFromMem(memory);
+              //hit = 0;
               return true; //found a new process
           }else{
-              PrintProcessFromMem(memory);
               //don't enter in process because not enough memor
               return false; //no new process
           }
       }else{
-
-          PrintProcessFromMem(memory);
           return true; //returns true if no processes
       }
 
@@ -75,7 +71,7 @@ public class RoundRobin {
                     MemCount++;
                     if (MemCount == Size) {
                         for (int i = 0; i < MemCount; i++) {
-                            hit = 1; // found room in mem
+                           hit = 1; // found room in mem
                             memory[c - i] = id;
                         }
                         c = 17;
@@ -104,7 +100,7 @@ public class RoundRobin {
 
         for (int c = 0; c <= 15; ++c) {
 
-            System.out.println(memory[c] + " | ");
+            System.out.print(memory[c] + " | ");
         }
 
         System.out.println();
@@ -129,12 +125,17 @@ public class RoundRobin {
     //gets oldest new Process (top of newQueue) and adds to ready; Does not increment clock
     // returns false if no new processes, true if new process was moved to ready
     public boolean newProcessToReady(){
-        if(newProcesses.size()>0) {
-            readyQueue.add(newProcesses.remove(0)); //removing from new and adding to ready queue
-            readyQueue.get(readyQueue.size() - 1).setState(2); //setting newly added ready to ready
 
-            getDisplayPanel(); //TODO:not sure if this will work/update display correctly
-            return true; //new process was found
+        if(newProcesses.size()>0) {
+            RoundRobin.checkForMemory();
+            if (hit == 1) {
+                readyQueue.add(newProcesses.remove(0)); //removing from new and adding to ready queue
+                readyQueue.get(readyQueue.size() - 1).setState(2); //setting newly added ready to ready
+                hit = 0 ;
+                getDisplayPanel(); //TODO:not sure if this will work/update display correctly
+                return true; //new process was found
+            }
+            return false;
         }else{ //no new processes found
             //doesn't update display
             return false;
@@ -178,6 +179,7 @@ public class RoundRobin {
             running.get(0).runOneCycle();
             //checking if process is done after this cycle
             if(running.get(0).complete == true){
+                RemoveProcessFromMem(running.get(0).PROCESS_ID, memory);
                 exited.add(running.remove(0)); //process exits
                 exited.get(exited.size()-1).setState(5); //sets this last exited process to state exited, updates display
                 getDisplayPanel();//TODO:not sure if this will work/update display correctly
@@ -220,7 +222,7 @@ public class RoundRobin {
         displayPanel.add(buttonUntilDone);
         buttonStep1.setText("Step Forward Once");
         displayPanel.add(buttonStep1);
-
+        
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
 
         displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
@@ -271,6 +273,7 @@ public class RoundRobin {
         System.out.println();
 
         displayFrame.add(displayPanel);
+
 
         displayFrame.setSize(500, 1000);
         displayFrame.setLocationRelativeTo(null);
