@@ -93,75 +93,77 @@ public class OperatingSystem extends RoundRobin{
 
         }); //ActionListenerEnd
     }
-    static Object lock2=new Object();
-    static boolean isRunning2 = false;
-    public static class Thr2 extends Thread
-    {
-       // @Override
-        public void run()
-        {
-
-
-            synchronized(lock2)
-            {
-                isRunning2=!isRunning2;
-            }
-            if (isRunning2 == true)
-            {
-
-
-                    if (exited.size() < ALL_PROCESSES.size()) { //while there are processes that haven't been entered
-                        /**Fetch*/
-                        osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
-                        osRoundRobin.newProcessToReady(); //takes new process and puts in ready
-                        /**Check*/
-                        osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
-                        /**Execute*/
-                        osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
-                        //running now empty, last run process at bottom of ready
-
-                    }
-                    synchronized(lock2)
-                    {
-                        if (!isRunning2)
-                        {
-
-
-                        }
-                    }
-
-                synchronized(lock2)
-                {
-                    isRunning2 = false;
-                }
-            }
-            isRunning2 = true;
-        }
-    }
-    static Thr2 thread2=null;
-    static void ActionListener2() {
-        buttonStep1.addActionListener(new ActionListener()//ActionListener
-        {
-            public void actionPerformed(ActionEvent e)//Execute when button is pressed
-
-            {
-                if (thread2 == null) {
-                    thread2 = new Thr2(); // should add in an executor
-                    thread2.start();
-                } else {
-
-                    synchronized (lock2) {
-                        isRunning2 = false;
-
-                    }
-
-                }
-            }
-
-
-        }); //ActionListenerEnd
-
-    }
+//    static Object lock2=new Object();
+//    static boolean isRunning2 = false;
+//    public static class Thr2 extends Thread
+//    {
+//       // @Override
+//        public void run()
+//        {
+//
+//
+//            synchronized(lock2)
+//            {
+//                isRunning2=!isRunning2;
+//            }
+//            if (isRunning2 == true)
+//            {
+//
+//
+//                    if (exited.size() < ALL_PROCESSES.size()) { //while there are processes that haven't been entered
+//                        /**Fetch*/
+//                        osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
+//                        osRoundRobin.newProcessToReady(); //takes new process and puts in ready
+//                        /**Check*/
+//                        osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
+//                        /**Execute*/
+//                        osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
+//                        //running now empty, last run process at bottom of ready
+//
+//                    }
+//                    synchronized(lock2)
+//                    {
+//                        if (!isRunning2)
+//                        {
+//
+//
+//                        }
+//                    }
+//
+//                synchronized(lock2)
+//                {
+//                    isRunning2 = false;
+//                }
+//            }
+//            isRunning2 = true;
+//        }
+//    }
+//    static Thr2 thread2=null;
+//    static void ActionListener2() {
+//        buttonStep1.addActionListener(new ActionListener()//ActionListener
+//        {
+//            public void actionPerformed(ActionEvent e)//Execute when button is pressed
+//
+//            {
+//                if (thread2 == null) {
+//                    thread2 = new Thr2(); // should add in an executor
+//
+//                    thread2.start();
+//
+//                } else {
+//
+//                    synchronized (lock2) {
+//                        isRunning2 = false;
+//
+//                    }
+//
+//                }
+//            }
+//
+//
+//        }); //ActionListenerEnd
+//
+//    }
 
 
 
@@ -282,7 +284,7 @@ public class OperatingSystem extends RoundRobin{
 
         ActionListener();
 
-        ActionListener2();
+//        ActionListener2();
 
 
 
@@ -339,23 +341,28 @@ public class OperatingSystem extends RoundRobin{
 //                }
 //            }
 //        });
-//        buttonStep1.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (buttonStep1.isEnabled()) {
-//                    if (exited.size() < ALL_PROCESSES.size()) { //while there are processes that haven't been entered
-//                        /**Fetch*/
-//                        osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
-//                        osRoundRobin.newProcessToReady(); //takes new process and puts in ready
-//                        /**Check*/
-//                        osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
-//                        /**Execute*/
-//                        osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
-//                        //running now empty, last run process at bottom of ready
-//                    }
-//                }
-//            }
-//        });
+        buttonStep1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (buttonStep1.isEnabled()) {
+                    if (exited.size() < ALL_PROCESSES.size()) { //while there are processes that haven't been entered
+                        /**Fetch*/
+                        if (x == 0){
+                        osRoundRobin.enterProcess(); //increments processesEntered and takes top outsideProcess to new
+                        osRoundRobin.newProcessToReady(); //takes new process and puts in ready
+                        /**Check*/
+                        osRoundRobin.readyQueueToRun(); //takes ready process and puts in run
+                        x=1;
+                        /**Execute*/
+                        }else if (x == 1) {
+                            osRoundRobin.run10Cycles(); //runs the process for 10 cycles + any I/O scheduled in those cycles
+                            //running now empty, last run process at bottom of ready
+                        x=0;
+                        }
+                        }
+                }
+            }
+        });
         buttonNew.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
