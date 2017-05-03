@@ -5,9 +5,10 @@
      * Created by Chris on 4/26/2017.
      */
     public class Memory {
+
+        static int[] memory = new int[16];
         public static void main(String[] args) {
 
-            int[] memory = new int[16];
             int Size = 5;
             int remove = 0;
             Random randomGenerator = new Random();

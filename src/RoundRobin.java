@@ -1,7 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import static com.sun.javafx.fxml.expression.Expression.add;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 
 /**
  * MAY DELETE THIS CLASS
@@ -11,7 +20,6 @@ public class RoundRobin {
     int TIME_QUANTUM = 1; //1 second for timeslice
     static int hit = 0;
     static int processesEntered = 0; //counts incoming processes, should increment for each new process entered in system
-
     static int[] memory = new int[16];
     static List<OSProcess> ALL_PROCESSES; //all processes and their state/info before being entered
 
@@ -25,6 +33,8 @@ public class RoundRobin {
 
     //sets up OS
     public RoundRobin() {
+
+
         this.ALL_PROCESSES = new ArrayList<>();
 
         this.outsideProcesses = new ArrayList<>();
@@ -95,7 +105,6 @@ public class RoundRobin {
     public static int[] PrintProcessFromMem(int[] memory) {
 
         for (int c = 0; c <= 15; ++c) {
-
             System.out.print(memory[c] + " | ");
         }
 
@@ -104,9 +113,10 @@ public class RoundRobin {
         return (memory);
     }
 
+
     //entering in next process on outside queue; returns false if no more outside processes
     public boolean enterProcess(){
-        if(outsideProcesses.size()>0) {
+        if(outsideProcesses.size()>0 && newProcesses.size() == 0) {
             processesEntered++;
             newProcesses.add(outsideProcesses.remove(0)); //entering process in system
             newProcesses.get(newProcesses.size() - 1).setState(2); //setting recently entered process to ready
@@ -168,11 +178,17 @@ public class RoundRobin {
 //    //gets only process in running list and runs it
     public void run10Cycles(){
         //run 10 cycles unless process complete
+        getDisplayPanel();
         for(int c=1; c<=10; c++){
             //first checks for I/O interrupt
+
             runningIOCheck();
+
             //then keep running
+            getDisplayPanel();
+
             running.get(0).runOneCycle();
+
             //checking if process is done after this cycle
             if(running.get(0).complete == true){
                 RemoveProcessFromMem(running.get(0).PROCESS_ID, memory);
@@ -184,6 +200,7 @@ public class RoundRobin {
         } //process ran for 10 cycles + I/O ran
         //now bring in any unentered processes
         //also checks Memory
+
         this.newProcessToReady(); //makes sure to bring in new processes after this one is done running
         getDisplayPanel();
         //now we can place process that just finished running to the bottom of ready
@@ -192,6 +209,11 @@ public class RoundRobin {
             readyQueue.add(running.remove(0)); //removes process that just finished running and places into readyQueue
             readyQueue.get(readyQueue.size() - 1).setState(2); //setting state back to ready
             getDisplayPanel();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -203,80 +225,111 @@ public class RoundRobin {
 
     static JButton buttonUntilDone = new JButton();
     static JButton buttonStep1 = new JButton();
+    static JButton buttonNew = new JButton();
+    static JButton buttonReady = new JButton();
+    // add the panel to a JScrollPane
 
 
-    static public JFrame getDisplayPanel(){
+    public static JFrame getDisplayPanel(){
         displayPanel.removeAll();
         displayPanel.revalidate();
         displayPanel.repaint();
+
+
 
         buttonUntilDone.setText("Run Until Full Stop");
         displayPanel.add(buttonUntilDone);
         buttonStep1.setText("Step Forward Once");
         displayPanel.add(buttonStep1);
-        
+        buttonNew.setText("Display Unentered");
+        displayPanel.add(buttonNew);
+        buttonReady.setText("Display Exited");
+        displayPanel.add(buttonReady);
+
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.PAGE_AXIS));
 
+        displayPanel.add(new JLabel(Arrays.toString(memory)));
+       // System.out.println(Arrays.toString(memory));
         displayPanel.add(new JLabel("Clock Time: " + OSClock.clock));
         System.out.println("Clock Time: " + OSClock.clock);
-        System.out.println("**UNENTERED PROCESSES**");
-        displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
-        for(OSProcess unenteredProcess : outsideProcesses){
-            displayPanel.add(unenteredProcess.getProcessDisplay());
-            System.out.println(unenteredProcess.processDisplayToString());
-            System.out.println();
-        }
+       // System.out.println("**UNENTERED PROCESSES**");
+//        displayPanel.add(new JLabel("**UNENTERED PROCESSES**"));
+//        for(OSProcess unenteredProcess : outsideProcesses){
+//            displayPanel.add(unenteredProcess.getProcessDisplay());
+//           // System.out.println(unenteredProcess.processDisplayToString());
+//            //System.out.println();
+//        }
         System.out.println("**NEW PROCESSES**");
-        displayPanel.add(new JLabel("**NEW PROCESSES**"));
+        JLabel newPLabel = new JLabel("**NEW PROCESSES**");
+        newPLabel.setFont(newPLabel.getFont().deriveFont(15));
+        newPLabel.setForeground(Color.BLUE);
+        displayPanel.add(newPLabel);
         for(OSProcess newProcess : newProcesses){
             displayPanel.add(newProcess.getProcessDisplay());
             System.out.println(newProcess.processDisplayToString());
             System.out.println();
         }
-        System.out.println("**READY QUEUE**");
-        displayPanel.add(new JLabel("**READY QUEUE**"));
+        //System.out.println("**READY QUEUE**");
+        JLabel readyLabel = new JLabel("**READY QUEUE**");
+        readyLabel.setFont(readyLabel.getFont().deriveFont(15));
+        readyLabel.setForeground(Color.BLUE);
+        displayPanel.add(readyLabel);
         for(OSProcess readyProcess : readyQueue){
             displayPanel.add(readyProcess.getProcessDisplay());
-            System.out.println(readyProcess.processDisplayToString());
-            System.out.println();
+           // System.out.println(readyProcess.processDisplayToString());
+           // System.out.println();
         }
-        System.out.println("**BLOCKED PROCESSES**");
-        displayPanel.add(new JLabel("**BLOCKED PROCESSES**"));
+        //System.out.println("**BLOCKED PROCESSES**");
+        JLabel blockedLabel = new JLabel("**BLOCKED PROCESSES**");
+        blockedLabel.setFont(blockedLabel.getFont().deriveFont(15));
+        blockedLabel.setForeground(Color.BLUE);
+        displayPanel.add(blockedLabel);
         for(OSProcess blockedProcess : blocked){
             displayPanel.add(blockedProcess.getProcessDisplay());
-            System.out.println(blockedProcess.processDisplayToString());
-            System.out.println();
+           // System.out.println(blockedProcess.processDisplayToString());
+           // System.out.println();
         }
-        System.out.println("**RUNNING PROCESS**");
-        displayPanel.add(new JLabel("**RUNNING PROCESS**"));
+      System.out.println("**RUNNING PROCESS**");
+        JLabel runningLabel = new JLabel("**RUNNING PROCESS**");
+        runningLabel.setFont(runningLabel.getFont().deriveFont(15));
+        runningLabel.setForeground(Color.BLUE);
+        displayPanel.add(runningLabel);
         for(OSProcess runningProcess : running){
             displayPanel.add(runningProcess.getProcessDisplay());
-            System.out.println(runningProcess.processDisplayToString());
-            System.out.println();
+           System.out.println(runningProcess.processDisplayToString());
+         //   System.out.println();
         }
-        System.out.println("**FINISHED/EXITED PROCESSES**");
-        displayPanel.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
+        //System.out.println("**FINISHED/EXITED PROCESSES**");
+        JLabel exitedLabel = new JLabel("**FINISHED/EXITED PROCESSES**");
+        exitedLabel.setFont(exitedLabel.getFont().deriveFont(15));
+        exitedLabel.setForeground(Color.BLUE);
+        displayPanel.add(exitedLabel);
         for(OSProcess exitedProcess : exited){
             displayPanel.add(exitedProcess.getProcessDisplay());
-            System.out.println(exitedProcess.processDisplayToString());
-            System.out.println();
-        }
+           // System.out.println(exitedProcess.processDisplayToString());
+            //System.out.println();
+        }        displayPanel.add(new JLabel("**FINISHED/EXITED PROCESSES**"));
+
+
+
         System.out.println("*********END OF DISPLAY METHOD******************");
         System.out.println();
 
         displayFrame.add(displayPanel);
 
-
-        displayFrame.setSize(500, 1000);
+        displayFrame.setSize(1000, 1000);
         displayFrame.setLocationRelativeTo(null);
         displayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         displayFrame.setVisible(true);
 
 
-        Container container = displayFrame.getContentPane();
-        JScrollPane displayScroll = new JScrollPane(displayPanel);
-        container.add(displayScroll);
+//        Container container = displayFrame.getContentPane();
+//        JScrollPane displayScroll = new JScrollPane(displayPanel);
+//        container.add(displayScroll);
 
         return displayFrame;
     }
+
+
+
 }

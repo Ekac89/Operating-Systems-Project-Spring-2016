@@ -125,14 +125,16 @@ public class OSProcess{
     //update display for this particular process
     public void updateProcessDisplay(){
         this.processDisplay.setLayout(new BoxLayout(processDisplay, SwingConstants.CENTER));
-        this.processDisplay.setText("<html>" +
-                "Process ID: " + this.PROCESS_ID
+        this.processDisplay.setText("<html>"
+                +"******************"
+                +"<br>Process ID: " + this.PROCESS_ID
                 + "<br>Total CPU time needed: " + this.TIME_NEEDED
                 + "<br>CPU time left: " + this.timeLeft
                 + "<br>On cycle " + this.cycleCurrent + " of " + this.CYCLES
                 + "<br>Number of I/O requests satisfied: " + this.ioRequestsSatisfied
                 + "<br>Number of I/O requests unsatisfied: " + this.ioRequestsUnsatisfied
                 + "<br>Current state: " + stateToString()
+                + "<br>******************"
                 + "</html>");
 
     }
